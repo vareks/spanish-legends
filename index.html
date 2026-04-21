@@ -3,47 +3,478 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Boxing Talents — MVP0</title>
+  <title>Boxing Talents — MVP1</title>
   <style>
-    :root{--gold:#C9A84C;--gold2:#F0D060;--red:#A01020;--bg:#0C0B09;--bg2:#141210;--border:#2A2618;--text:#EDE8D8;--muted:#8a846f}
-    *{box-sizing:border-box;margin:0;padding:0} body{font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#0c0b09,#141210);color:var(--text)}
-    .wrap{max-width:1200px;margin:0 auto;padding:24px} .hero{padding:72px 0 32px;text-align:center}
-    h1{font-size:56px;letter-spacing:2px} h1 span{color:var(--gold)} p{color:var(--muted)}
-    .cta{display:inline-block;margin-top:18px;padding:12px 20px;background:var(--gold);color:#111;text-decoration:none;font-weight:700;border-radius:6px}
-    .stats,.grid{display:grid;gap:16px}.stats{grid-template-columns:repeat(auto-fit,minmax(180px,1fr));margin:28px 0}.card{background:var(--bg2);border:1px solid var(--border);padding:18px;border-radius:10px}
-    .num{font-size:34px;color:var(--gold2);font-weight:700}.label{font-size:12px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted)}
-    .section-title{font-size:28px;margin:20px 0}.grid{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
-    .fighter h3{margin-bottom:6px}.tag{display:inline-block;padding:4px 8px;border:1px solid var(--border);border-radius:999px;color:var(--gold);font-size:12px;margin-bottom:10px}
-    .record{margin-top:10px;color:var(--muted)} footer{padding:40px 0;color:var(--muted);text-align:center}
+    :root { --gold:#C9A84C; --gold2:#F0D060; --red:#A01020; --bg:#0C0B09; --bg2:#141210; --border:#2A2618; --text:#EDE8D8; --muted:#8a846f; --ok:#277d49; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, Helvetica, sans-serif; background: linear-gradient(180deg,#0c0b09,#141210); color: var(--text); }
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 24px; }
+    .hero { padding: 48px 0 24px; text-align: center; }
+    h1 { font-size: clamp(34px, 6vw, 56px); letter-spacing: 2px; }
+    h1 span { color: var(--gold); }
+    p { color: var(--muted); }
+    .cta, button, .tab {
+      display:inline-block; margin-top:12px; padding:10px 14px; background:var(--gold); color:#111;
+      border:none; border-radius:6px; cursor:pointer; font-weight:700;
+    }
+    button.secondary, .tab.secondary { background: transparent; color: var(--text); border: 1px solid var(--border); }
+    .topbar { display:flex; gap:12px; justify-content:space-between; align-items:center; flex-wrap:wrap; }
+    .tabs { display:flex; gap:8px; flex-wrap:wrap; margin: 18px 0; }
+    .tab.active { background: var(--gold2); }
+    .stats, .grid { display:grid; gap:16px; }
+    .stats { grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); margin: 14px 0 24px; }
+    .grid { grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); }
+    .card { background: var(--bg2); border:1px solid var(--border); padding:16px; border-radius:10px; }
+    .num { font-size:34px; color:var(--gold2); font-weight:700; }
+    .label { font-size:12px; text-transform:uppercase; letter-spacing:1.5px; color:var(--muted); }
+    .section-title { font-size:26px; margin:18px 0 10px; }
+    .tag { display:inline-block; padding:4px 8px; border:1px solid var(--border); border-radius:999px; color:var(--gold); font-size:12px; margin-bottom:10px; }
+    .record { margin-top:8px; color:var(--muted); }
+    .hidden { display:none !important; }
+    .admin-shell { display:grid; grid-template-columns: 220px 1fr; gap:16px; }
+    .admin-menu { display:flex; flex-direction:column; gap:8px; }
+    .admin-panel h3 { margin-bottom:12px; }
+    form { display:grid; gap:8px; margin-bottom: 16px; }
+    input, select {
+      background:#0b0a08; color:var(--text); border:1px solid var(--border); border-radius:6px; padding:8px;
+    }
+    .form-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap:8px; }
+    .list { display:grid; gap:10px; }
+    .item-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
+    .err { color: #ff7777; font-size: 13px; }
+    .ok { color: #90dfae; font-size: 13px; }
+    .match { border-top:1px dashed var(--border); margin-top:8px; padding-top:8px; }
+    footer { padding:40px 0; color:var(--muted); text-align:center; }
+    @media (max-width: 900px) { .admin-shell { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <section class="hero">
-      <p class="label">Liga oficial · MVP0</p>
-      <h1>BOXING <span>TALENTS</span></h1>
-      <p>Landing inicial desplegable en Vercel con listado demo de boxeadores y look & feel de competición.</p>
-      <a class="cta" href="#fighters">Ver boxeadores</a>
-    </section>
+  <div class="wrap" id="app"></div>
 
-    <section class="stats">
-      <div class="card"><div class="num">24</div><div class="label">Boxeadores</div></div>
-      <div class="card"><div class="num">6</div><div class="label">Categorías</div></div>
-      <div class="card"><div class="num">8</div><div class="label">Eventos</div></div>
-      <div class="card"><div class="num">1</div><div class="label">Bracket activo</div></div>
-    </section>
+  <script>
+    const WEIGHT_CLASSES = [
+      { key: 'Peso Mosca', min: 0, max: 50.8 },
+      { key: 'Peso Gallo', min: 50.9, max: 53.5 },
+      { key: 'Peso Pluma', min: 53.6, max: 57.1 },
+      { key: 'Peso Ligero', min: 57.2, max: 61.2 },
+      { key: 'Peso Welter', min: 61.3, max: 66.7 },
+      { key: 'Peso Medio', min: 66.8, max: 72.6 },
+      { key: 'Peso Semipesado', min: 72.7, max: 79.4 },
+      { key: 'Peso Pesado', min: 79.5, max: 130 }
+    ];
 
-    <section id="fighters">
-      <h2 class="section-title">Talents destacados</h2>
-      <div class="grid">
-        <article class="card fighter"><div class="tag">Peso Welter</div><h3>Carlos Mendoza</h3><p>Vigo · La Vieja Escuela</p><div class="record">18-2-0 · 14 KO</div></article>
-        <article class="card fighter"><div class="tag">Peso Ligero</div><h3>Danny Reyes</h3><p>Madrid · Puño Norte</p><div class="record">16-1-1 · 9 KO</div></article>
-        <article class="card fighter"><div class="tag">Peso Medio</div><h3>Iván Cortés</h3><p>Sevilla · South Ring</p><div class="record">13-0-0 · 8 KO</div></article>
-        <article class="card fighter"><div class="tag">Peso Pluma</div><h3>Leo Vargas</h3><p>Bilbao · Old School Gym</p><div class="record">20-3-0 · 11 KO</div></article>
-      </div>
-    </section>
+    const DEFAULT_STATE = {
+      ui: { activeTab: 'public', adminSection: 'fighters', isAdmin: false },
+      adminPass: 'boxing123',
+      fighters: [
+        { id: crypto.randomUUID(), name: 'Carlos Mendoza', city: 'Vigo', gym: 'La Vieja Escuela', category: 'Peso Welter', weight: 66.2, wins: 18, losses: 2, draws: 0, kos: 14 },
+        { id: crypto.randomUUID(), name: 'Danny Reyes', city: 'Madrid', gym: 'Puño Norte', category: 'Peso Ligero', weight: 60.4, wins: 16, losses: 1, draws: 1, kos: 9 },
+        { id: crypto.randomUUID(), name: 'Iván Cortés', city: 'Sevilla', gym: 'South Ring', category: 'Peso Medio', weight: 71.8, wins: 13, losses: 0, draws: 0, kos: 8 },
+        { id: crypto.randomUUID(), name: 'Leo Vargas', city: 'Bilbao', gym: 'Old School Gym', category: 'Peso Pluma', weight: 56.8, wins: 20, losses: 3, draws: 0, kos: 11 }
+      ],
+      events: [
+        { id: crypto.randomUUID(), name: 'Night of Talents', date: '2026-05-12', venue: 'Madrid Arena', status: 'Programado' },
+        { id: crypto.randomUUID(), name: 'Golden Gloves', date: '2026-06-01', venue: 'Bilbao Coliseum', status: 'Abierto' }
+      ],
+      brackets: []
+    };
 
-    <footer>Despliegue recomendado: Vercel. MVP0 estático listo para publicar.</footer>
-  </div>
+    const storageKey = 'boxing-talents-mvp1';
+    let state = loadState();
+    let editRefs = { fighterId: null, eventId: null };
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(storageKey);
+        if (!raw) return structuredClone(DEFAULT_STATE);
+        const parsed = JSON.parse(raw);
+        return {
+          ...structuredClone(DEFAULT_STATE),
+          ...parsed,
+          ui: { ...DEFAULT_STATE.ui, ...(parsed.ui || {}), isAdmin: false }
+        };
+      } catch {
+        return structuredClone(DEFAULT_STATE);
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem(storageKey, JSON.stringify({ ...state, ui: { ...state.ui, isAdmin: false } }));
+    }
+
+    function setState(updater) {
+      state = updater(state);
+      saveState();
+      render();
+    }
+
+    function categoryOptions(selected) {
+      return WEIGHT_CLASSES.map(c => `<option value="${c.key}" ${c.key === selected ? 'selected' : ''}>${c.key}</option>`).join('');
+    }
+
+    function findWeightClass(key) { return WEIGHT_CLASSES.find(c => c.key === key); }
+
+    function validateFighter(payload) {
+      const required = ['name', 'city', 'gym', 'category'];
+      for (const field of required) if (!payload[field]) return `${field} es obligatorio`;
+      const weight = Number(payload.weight);
+      if (!Number.isFinite(weight) || weight <= 0) return 'Peso inválido';
+      const klass = findWeightClass(payload.category);
+      if (!klass) return 'Categoría inválida';
+      if (weight < klass.min || weight > klass.max) {
+        return `Peso incoherente para ${klass.key} (${klass.min}kg-${klass.max}kg)`;
+      }
+      return null;
+    }
+
+    function validateEvent(payload) {
+      if (!payload.name || !payload.venue || !payload.status || !payload.date) return 'Todos los campos de evento son obligatorios';
+      const date = new Date(payload.date + 'T00:00:00');
+      if (Number.isNaN(date.getTime())) return 'Fecha inválida';
+      return null;
+    }
+
+    function validateRoundSize(participants) {
+      if (participants.length < 2 || participants.length % 2 !== 0) {
+        return 'Se requieren participantes pares y al menos 2 para crear combates';
+      }
+      return null;
+    }
+
+    function publicView() {
+      const categoriesCount = new Set(state.fighters.map(f => f.category)).size;
+      return `
+        <section class="hero">
+          <p class="label">Liga oficial · MVP1</p>
+          <h1>BOXING <span>TALENTS</span></h1>
+          <p>Listado y estadísticas renderizadas dinámicamente desde estado persistido.</p>
+          <a class="cta" href="#fighters">Ver boxeadores</a>
+        </section>
+
+        <section class="stats">
+          <div class="card"><div class="num">${state.fighters.length}</div><div class="label">Boxeadores</div></div>
+          <div class="card"><div class="num">${categoriesCount}</div><div class="label">Categorías</div></div>
+          <div class="card"><div class="num">${state.events.length}</div><div class="label">Eventos</div></div>
+          <div class="card"><div class="num">${state.brackets.length}</div><div class="label">Brackets</div></div>
+        </section>
+
+        <section id="fighters">
+          <h2 class="section-title">Talents destacados</h2>
+          <div class="grid">
+            ${state.fighters.map(f => `
+              <article class="card fighter">
+                <div class="tag">${f.category}</div>
+                <h3>${f.name}</h3>
+                <p>${f.city} · ${f.gym}</p>
+                <div class="record">${f.wins}-${f.losses}-${f.draws} · ${f.kos} KO · ${f.weight}kg</div>
+              </article>`).join('')}
+          </div>
+        </section>
+      `;
+    }
+
+    function adminLoginView() {
+      return `
+      <section class="card">
+        <h2 class="section-title">Admin (protegido)</h2>
+        <p>Introduce la clave local para habilitar el modo admin.</p>
+        <form id="admin-login-form">
+          <input type="password" name="password" placeholder="Clave admin" required />
+          <button type="submit">Entrar al admin</button>
+        </form>
+        <div id="admin-login-msg" class="err"></div>
+      </section>`;
+    }
+
+    function fightersModule() {
+      const editing = state.fighters.find(f => f.id === editRefs.fighterId);
+      return `
+      <section class="admin-panel card">
+        <h3>Gestión de boxeadores</h3>
+        <form id="fighter-form">
+          <div class="form-grid">
+            <input name="name" placeholder="Nombre" required value="${editing?.name || ''}" />
+            <input name="city" placeholder="Ciudad" required value="${editing?.city || ''}" />
+            <input name="gym" placeholder="Gimnasio" required value="${editing?.gym || ''}" />
+            <select name="category" required>${categoryOptions(editing?.category || 'Peso Ligero')}</select>
+            <input type="number" step="0.1" name="weight" placeholder="Peso (kg)" required value="${editing?.weight ?? ''}" />
+            <input type="number" name="wins" min="0" placeholder="Victorias" required value="${editing?.wins ?? 0}" />
+            <input type="number" name="losses" min="0" placeholder="Derrotas" required value="${editing?.losses ?? 0}" />
+            <input type="number" name="draws" min="0" placeholder="Nulos" required value="${editing?.draws ?? 0}" />
+            <input type="number" name="kos" min="0" placeholder="KO" required value="${editing?.kos ?? 0}" />
+          </div>
+          <button type="submit">${editing ? 'Guardar cambios' : 'Crear boxeador'}</button>
+          ${editing ? '<button type="button" class="secondary" id="cancel-fighter-edit">Cancelar edición</button>' : ''}
+        </form>
+        <div id="fighter-msg"></div>
+        <div class="list">
+          ${state.fighters.map(f => `
+            <article class="card">
+              <div class="tag">${f.category}</div>
+              <strong>${f.name}</strong>
+              <p>${f.city} · ${f.gym} · ${f.weight}kg</p>
+              <p class="record">${f.wins}-${f.losses}-${f.draws} · ${f.kos} KO</p>
+              <div class="item-actions">
+                <button data-action="edit-fighter" data-id="${f.id}" class="secondary">Editar</button>
+                <button data-action="delete-fighter" data-id="${f.id}">Eliminar</button>
+              </div>
+            </article>`).join('')}
+        </div>
+      </section>`;
+    }
+
+    function eventsModule() {
+      const editing = state.events.find(e => e.id === editRefs.eventId);
+      return `
+      <section class="admin-panel card">
+        <h3>Gestión de eventos</h3>
+        <form id="event-form">
+          <div class="form-grid">
+            <input name="name" required placeholder="Nombre evento" value="${editing?.name || ''}" />
+            <input type="date" name="date" required value="${editing?.date || ''}" />
+            <input name="venue" required placeholder="Sede" value="${editing?.venue || ''}" />
+            <select name="status" required>
+              ${['Borrador','Programado','Abierto','Cerrado'].map(s => `<option value="${s}" ${editing?.status===s?'selected':''}>${s}</option>`).join('')}
+            </select>
+          </div>
+          <button type="submit">${editing ? 'Guardar cambios' : 'Crear evento'}</button>
+          ${editing ? '<button type="button" class="secondary" id="cancel-event-edit">Cancelar edición</button>' : ''}
+        </form>
+        <div id="event-msg"></div>
+        <div class="list">
+          ${state.events.map(e => `
+            <article class="card">
+              <strong>${e.name}</strong>
+              <p>${e.date} · ${e.venue}</p>
+              <p class="tag">${e.status}</p>
+              <div class="item-actions">
+                <button data-action="edit-event" data-id="${e.id}" class="secondary">Editar</button>
+                <button data-action="delete-event" data-id="${e.id}">Eliminar</button>
+              </div>
+            </article>`).join('')}
+        </div>
+      </section>`;
+    }
+
+    function bracketsModule() {
+      return `
+      <section class="admin-panel card">
+        <h3>Gestión de brackets</h3>
+        <form id="bracket-form">
+          <div class="form-grid">
+            <input name="name" required placeholder="Nombre bracket" />
+            <input name="roundName" required placeholder="Nombre ronda inicial (ej: Cuartos)" />
+            <select multiple name="participants" size="6" required>
+              ${state.fighters.map(f => `<option value="${f.id}">${f.name} — ${f.category}</option>`).join('')}
+            </select>
+          </div>
+          <button type="submit">Crear bracket y ronda</button>
+        </form>
+        <div id="bracket-msg"></div>
+        <div class="list">
+          ${state.brackets.map(b => `
+            <article class="card">
+              <strong>${b.name}</strong>
+              ${b.rounds.map((r, ri) => `
+                <div class="match">
+                  <p><span class="tag">${r.name}</span></p>
+                  ${r.matches.map((m, mi) => {
+                    const f1 = state.fighters.find(f => f.id === m.fighter1Id)?.name || 'N/D';
+                    const f2 = state.fighters.find(f => f.id === m.fighter2Id)?.name || 'N/D';
+                    const winnerName = state.fighters.find(f => f.id === m.winnerId)?.name;
+                    return `<div class="card">
+                      <p>${f1} vs ${f2}</p>
+                      <p class="record">Ganador: ${winnerName || 'Sin definir'}</p>
+                      <div class="item-actions">
+                        <button data-action="pick-winner" data-bid="${b.id}" data-ri="${ri}" data-mi="${mi}" data-wid="${m.fighter1Id}" class="secondary">Gana ${f1}</button>
+                        <button data-action="pick-winner" data-bid="${b.id}" data-ri="${ri}" data-mi="${mi}" data-wid="${m.fighter2Id}" class="secondary">Gana ${f2}</button>
+                      </div>
+                    </div>`;
+                  }).join('')}
+                </div>`).join('')}
+            </article>`).join('')}
+        </div>
+      </section>`;
+    }
+
+    function adminView() {
+      if (!state.ui.isAdmin) return adminLoginView();
+      return `
+        <section class="admin-shell">
+          <aside class="admin-menu card">
+            <button class="${state.ui.adminSection==='fighters'?'':'secondary'}" data-action="set-admin-section" data-section="fighters">Boxeadores</button>
+            <button class="${state.ui.adminSection==='events'?'':'secondary'}" data-action="set-admin-section" data-section="events">Eventos</button>
+            <button class="${state.ui.adminSection==='brackets'?'':'secondary'}" data-action="set-admin-section" data-section="brackets">Brackets</button>
+            <button data-action="logout-admin" class="secondary">Salir de admin</button>
+          </aside>
+          <main>
+            ${state.ui.adminSection === 'fighters' ? fightersModule() : ''}
+            ${state.ui.adminSection === 'events' ? eventsModule() : ''}
+            ${state.ui.adminSection === 'brackets' ? bracketsModule() : ''}
+          </main>
+        </section>
+      `;
+    }
+
+    function render() {
+      const app = document.getElementById('app');
+      app.innerHTML = `
+        <div class="topbar">
+          <div>
+            <p class="label">Estado persistente localStorage</p>
+            <h1>BOXING <span>TALENTS</span></h1>
+          </div>
+          <div class="tabs">
+            <button class="tab ${state.ui.activeTab === 'public' ? 'active' : 'secondary'}" data-action="set-tab" data-tab="public">Público</button>
+            <button class="tab ${state.ui.activeTab === 'admin' ? 'active' : 'secondary'}" data-action="set-tab" data-tab="admin">Admin</button>
+          </div>
+        </div>
+        ${state.ui.activeTab === 'public' ? publicView() : adminView()}
+        <footer>MVP1 con estado, CRUD y persistencia local.</footer>
+      `;
+      bindEvents();
+    }
+
+    function bindEvents() {
+      document.querySelectorAll('[data-action="set-tab"]').forEach(btn => {
+        btn.onclick = () => setState(s => ({ ...s, ui: { ...s.ui, activeTab: btn.dataset.tab } }));
+      });
+
+      document.querySelectorAll('[data-action="set-admin-section"]').forEach(btn => {
+        btn.onclick = () => setState(s => ({ ...s, ui: { ...s.ui, adminSection: btn.dataset.section } }));
+      });
+
+      const adminForm = document.getElementById('admin-login-form');
+      if (adminForm) {
+        adminForm.onsubmit = (e) => {
+          e.preventDefault();
+          const pass = new FormData(adminForm).get('password');
+          if (pass === state.adminPass) {
+            setState(s => ({ ...s, ui: { ...s.ui, isAdmin: true } }));
+          } else {
+            document.getElementById('admin-login-msg').textContent = 'Clave incorrecta';
+          }
+        };
+      }
+
+      const logoutBtn = document.querySelector('[data-action="logout-admin"]');
+      if (logoutBtn) logoutBtn.onclick = () => setState(s => ({ ...s, ui: { ...s.ui, isAdmin: false } }));
+
+      const fighterForm = document.getElementById('fighter-form');
+      if (fighterForm) {
+        fighterForm.onsubmit = (e) => {
+          e.preventDefault();
+          const fd = new FormData(fighterForm);
+          const payload = Object.fromEntries(fd.entries());
+          payload.weight = Number(payload.weight);
+          payload.wins = Number(payload.wins);
+          payload.losses = Number(payload.losses);
+          payload.draws = Number(payload.draws);
+          payload.kos = Number(payload.kos);
+          const err = validateFighter(payload);
+          const msg = document.getElementById('fighter-msg');
+          if (err) { msg.className = 'err'; msg.textContent = err; return; }
+
+          setState(s => {
+            const fighters = editRefs.fighterId
+              ? s.fighters.map(f => f.id === editRefs.fighterId ? { ...f, ...payload } : f)
+              : [...s.fighters, { id: crypto.randomUUID(), ...payload }];
+            editRefs.fighterId = null;
+            return { ...s, fighters };
+          });
+        };
+      }
+
+      const cancelFighterEdit = document.getElementById('cancel-fighter-edit');
+      if (cancelFighterEdit) cancelFighterEdit.onclick = () => { editRefs.fighterId = null; render(); };
+
+      document.querySelectorAll('[data-action="edit-fighter"]').forEach(btn => btn.onclick = () => {
+        editRefs.fighterId = btn.dataset.id;
+        render();
+      });
+
+      document.querySelectorAll('[data-action="delete-fighter"]').forEach(btn => btn.onclick = () => {
+        setState(s => ({ ...s, fighters: s.fighters.filter(f => f.id !== btn.dataset.id) }));
+      });
+
+      const eventForm = document.getElementById('event-form');
+      if (eventForm) {
+        eventForm.onsubmit = (e) => {
+          e.preventDefault();
+          const payload = Object.fromEntries(new FormData(eventForm).entries());
+          const err = validateEvent(payload);
+          const msg = document.getElementById('event-msg');
+          if (err) { msg.className = 'err'; msg.textContent = err; return; }
+
+          setState(s => {
+            const events = editRefs.eventId
+              ? s.events.map(ev => ev.id === editRefs.eventId ? { ...ev, ...payload } : ev)
+              : [...s.events, { id: crypto.randomUUID(), ...payload }];
+            editRefs.eventId = null;
+            return { ...s, events };
+          });
+        };
+      }
+
+      const cancelEventEdit = document.getElementById('cancel-event-edit');
+      if (cancelEventEdit) cancelEventEdit.onclick = () => { editRefs.eventId = null; render(); };
+
+      document.querySelectorAll('[data-action="edit-event"]').forEach(btn => btn.onclick = () => {
+        editRefs.eventId = btn.dataset.id;
+        render();
+      });
+
+      document.querySelectorAll('[data-action="delete-event"]').forEach(btn => btn.onclick = () => {
+        setState(s => ({ ...s, events: s.events.filter(ev => ev.id !== btn.dataset.id) }));
+      });
+
+      const bracketForm = document.getElementById('bracket-form');
+      if (bracketForm) {
+        bracketForm.onsubmit = (e) => {
+          e.preventDefault();
+          const fd = new FormData(bracketForm);
+          const name = String(fd.get('name') || '');
+          const roundName = String(fd.get('roundName') || '');
+          const participants = fd.getAll('participants').map(String);
+          const msg = document.getElementById('bracket-msg');
+          if (!name || !roundName) { msg.className = 'err'; msg.textContent = 'Nombre y ronda son obligatorios'; return; }
+          const roundErr = validateRoundSize(participants);
+          if (roundErr) { msg.className = 'err'; msg.textContent = roundErr; return; }
+
+          const matches = [];
+          for (let i = 0; i < participants.length; i += 2) {
+            matches.push({ fighter1Id: participants[i], fighter2Id: participants[i + 1], winnerId: null });
+          }
+
+          setState(s => ({
+            ...s,
+            brackets: [...s.brackets, { id: crypto.randomUUID(), name, rounds: [{ name: roundName, matches }] }]
+          }));
+        };
+      }
+
+      document.querySelectorAll('[data-action="pick-winner"]').forEach(btn => btn.onclick = () => {
+        const { bid, ri, mi, wid } = btn.dataset;
+        setState(s => ({
+          ...s,
+          brackets: s.brackets.map(b => {
+            if (b.id !== bid) return b;
+            return {
+              ...b,
+              rounds: b.rounds.map((r, rIndex) => {
+                if (rIndex !== Number(ri)) return r;
+                return {
+                  ...r,
+                  matches: r.matches.map((m, mIndex) => mIndex === Number(mi) ? { ...m, winnerId: wid } : m)
+                };
+              })
+            };
+          })
+        }));
+      });
+    }
+
+    render();
+  </script>
 </body>
 </html>
