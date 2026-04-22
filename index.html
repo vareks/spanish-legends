@@ -5,30 +5,79 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Boxing Talents — MVP1</title>
   <style>
-    :root { --gold:#C9A84C; --gold2:#F0D060; --red:#A01020; --bg:#0C0B09; --bg2:#141210; --border:#2A2618; --text:#EDE8D8; --muted:#8a846f; --ok:#277d49; }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: Arial, Helvetica, sans-serif; background: linear-gradient(180deg,#0c0b09,#141210); color: var(--text); }
-    .wrap { max-width: 1200px; margin: 0 auto; padding: 24px; }
-    .hero { padding: 48px 0 24px; text-align: center; }
-    h1 { font-size: clamp(34px, 6vw, 56px); letter-spacing: 2px; }
-    h1 span { color: var(--gold); }
-    p { color: var(--muted); }
-    .cta, button, .tab {
-      display:inline-block; margin-top:12px; padding:10px 14px; background:var(--gold); color:#111;
-      border:none; border-radius:6px; cursor:pointer; font-weight:700;
+    :root {
+      --gold:#C9A84C; --gold2:#F0D060; --red:#9f0e24; --blue:#0f8bb6;
+      --bg:#060606; --bg2:#12100e; --bg3:#1a1714; --border:#3d2f15;
+      --text:#f8f2df; --muted:#b4aa8a; --ok:#277d49;
+      --poster-shadow: 0 14px 42px rgba(0,0,0,.45);
     }
-    button.secondary, .tab.secondary, .cta.secondary { background: transparent; color: var(--text); border: 1px solid var(--border); }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Impact, "Arial Black", Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(201,168,76,.2), transparent 40%),
+        radial-gradient(circle at 85% 10%, rgba(15,139,182,.22), transparent 45%),
+        linear-gradient(180deg,#080706,#12100e 55%, #0a0908);
+      color: var(--text);
+      min-height: 100vh;
+      letter-spacing: .2px;
+    }
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 24px; }
+    .hero { padding: 42px 0 22px; text-align: center; position:relative; }
+    .hero::before {
+      content:"";
+      position:absolute;
+      inset: 0;
+      background:
+        linear-gradient(160deg, rgba(255,255,255,.05), transparent 35%),
+        linear-gradient(20deg, rgba(201,168,76,.16), transparent 38%);
+      border:1px solid var(--border);
+      border-radius: 14px;
+      z-index:-1;
+      box-shadow: var(--poster-shadow);
+    }
+    h1 { font-size: clamp(34px, 6vw, 56px); letter-spacing: 2.2px; text-transform: uppercase; }
+    h1 span { color: var(--gold); }
+    p { color: var(--muted); font-family: "Trebuchet MS", Arial, sans-serif; }
+    .cta, button, .tab {
+      display:inline-block; margin-top:12px; padding:10px 14px; background:linear-gradient(180deg, var(--gold2), var(--gold)); color:#111;
+      border:1px solid #8f722e; border-radius:8px; cursor:pointer; font-weight:700;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+    }
+    button.secondary, .tab.secondary, .cta.secondary {
+      background: linear-gradient(180deg, #181612, #12100d);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
     .topbar { display:flex; gap:12px; justify-content:space-between; align-items:center; flex-wrap:wrap; }
     .tabs { display:flex; gap:8px; flex-wrap:wrap; margin: 18px 0; }
-    .tab.active { background: var(--gold2); }
+    .tab.active { background: linear-gradient(180deg, var(--gold2), var(--gold)); }
     .stats, .grid { display:grid; gap:16px; }
     .stats { grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); margin: 14px 0 24px; }
     .grid { grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); }
-    .card { background: var(--bg2); border:1px solid var(--border); padding:16px; border-radius:10px; }
+    .card {
+      background:
+        linear-gradient(170deg, rgba(255,255,255,.05), transparent 36%),
+        linear-gradient(180deg, var(--bg3), var(--bg2));
+      border:1px solid var(--border);
+      padding:16px;
+      border-radius:12px;
+      box-shadow: var(--poster-shadow);
+    }
     .num { font-size:34px; color:var(--gold2); font-weight:700; }
     .label { font-size:12px; text-transform:uppercase; letter-spacing:1.5px; color:var(--muted); }
     .section-title { font-size:26px; margin:18px 0 10px; }
-    .tag { display:inline-block; padding:4px 8px; border:1px solid var(--border); border-radius:999px; color:var(--gold); font-size:12px; margin-bottom:10px; }
+    .tag {
+      display:inline-block;
+      padding:4px 10px;
+      border:1px solid #7d6428;
+      border-radius:999px;
+      color:var(--gold2);
+      background:rgba(201,168,76,.15);
+      font-size:12px;
+      margin-bottom:10px;
+    }
     .record { margin-top:8px; color:var(--muted); }
     .cta-group { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:12px; }
     .hidden { display:none !important; }
@@ -46,6 +95,92 @@
     .ok { color: #90dfae; font-size: 13px; }
     .match { border-top:1px dashed var(--border); margin-top:8px; padding-top:8px; }
     footer { padding:40px 0; color:var(--muted); text-align:center; }
+    .belt-mark {
+      display:inline-block;
+      margin: 8px 0 12px;
+      background: radial-gradient(circle at 30% 30%, #fff6cb, #d6ab32 45%, #8b6a1f);
+      color:#201806;
+      border:2px solid #f8dd8e;
+      border-radius: 999px;
+      font-size: 12px;
+      padding: 6px 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: inset 0 0 12px rgba(255,255,255,.28), 0 4px 18px rgba(0,0,0,.35);
+    }
+    .bracket-graphic { overflow-x:auto; padding-bottom:8px; }
+    .bracket-grid {
+      display:grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(230px, 1fr);
+      gap: 18px;
+      min-width: max-content;
+      align-items:start;
+      margin-top: 10px;
+    }
+    .round-col { display:grid; gap: 12px; position:relative; padding-right: 16px; }
+    .round-col:not(:last-child)::after {
+      content: "";
+      position:absolute;
+      right: 2px;
+      top: 45px;
+      bottom: 6px;
+      width: 2px;
+      background: linear-gradient(180deg, transparent, rgba(201,168,76,.45), transparent);
+    }
+    .bracket-match {
+      border:1px solid #5a461c;
+      background: linear-gradient(180deg, #14110d, #100e0b);
+      border-radius: 10px;
+      padding: 8px;
+      position:relative;
+    }
+    .bracket-match::before {
+      content: "";
+      position:absolute;
+      left: -8px;
+      top: 50%;
+      width: 8px;
+      height: 2px;
+      background: rgba(201,168,76,.5);
+    }
+    .fighter-slot {
+      display:flex; justify-content:space-between; gap:8px;
+      font-family: "Trebuchet MS", Arial, sans-serif;
+      font-size: 13px; padding:6px 8px; border-radius: 8px;
+      border: 1px solid transparent;
+    }
+    .fighter-slot + .fighter-slot { margin-top: 6px; }
+    .fighter-slot.winner {
+      border-color: #90722d;
+      color: #fdf2cb;
+      background: linear-gradient(90deg, rgba(201,168,76,.28), rgba(201,168,76,.05));
+    }
+    .fighter-slot.pending {
+      color: #d7d1bc;
+      background: linear-gradient(90deg, rgba(255,255,255,.04), rgba(255,255,255,.01));
+    }
+    .fighter-slot .seed { color: #ebc866; font-size: 12px; }
+    .brand-strip {
+      border-top:1px solid var(--border);
+      margin-top:14px;
+      padding-top:12px;
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      justify-content:center;
+    }
+    .brand-pill {
+      border:1px solid #2f2b21;
+      background: linear-gradient(180deg, #111, #090909);
+      color:#d5c9a2;
+      border-radius:999px;
+      padding:5px 10px;
+      font-size:11px;
+      letter-spacing:.8px;
+      text-transform:uppercase;
+      font-family: "Trebuchet MS", Arial, sans-serif;
+    }
     @media (max-width: 900px) { .admin-shell { grid-template-columns: 1fr; } }
   </style>
 </head>
@@ -167,6 +302,45 @@
       return brackets.find(b => b.isActive) || null;
     }
 
+    function renderBracketGraphic(bracket) {
+      if (!bracket) return '<article class="card"><p>No hay un bracket activo en este momento.</p></article>';
+      return `
+        <article class="card">
+          <strong>${bracket.name}</strong>
+          <div class="bracket-graphic">
+            <div class="bracket-grid">
+              ${bracket.rounds.map((r) => `
+                <section class="round-col">
+                  <p><span class="tag">${r.name}</span></p>
+                  ${r.matches.map((m, mi) => {
+                    const f1 = state.fighters.find(f => f.id === m.fighter1Id)?.name || 'Pendiente';
+                    const f2 = state.fighters.find(f => f.id === m.fighter2Id)?.name || 'Pendiente';
+                    const isF1Winner = m.winnerId && m.winnerId === m.fighter1Id;
+                    const isF2Winner = m.winnerId && m.winnerId === m.fighter2Id;
+                    return `
+                      <article class="bracket-match">
+                        <div class="fighter-slot ${isF1Winner ? 'winner' : 'pending'}">
+                          <span>${f1}</span><span class="seed">M${mi + 1}</span>
+                        </div>
+                        <div class="fighter-slot ${isF2Winner ? 'winner' : 'pending'}">
+                          <span>${f2}</span><span class="seed">M${mi + 1}</span>
+                        </div>
+                      </article>
+                    `;
+                  }).join('')}
+                </section>
+              `).join('')}
+            </div>
+          </div>
+          <div class="brand-strip">
+            <span class="brand-pill">Custom Fighter</span>
+            <span class="brand-pill">Rock & Box</span>
+            <span class="brand-pill">Fight Night</span>
+          </div>
+        </article>
+      `;
+    }
+
     function publicView() {
       const upcomingEvents = getUpcomingEvents(state.events);
       const activeBracket = getActiveBracket(state.brackets);
@@ -174,7 +348,8 @@
         <section class="hero">
           <p class="label">Liga oficial · MVP1</p>
           <h1>BOXING <span>TALENTS</span></h1>
-          <p>Listado y estadísticas renderizadas dinámicamente desde estado persistido.</p>
+          <div class="belt-mark">Rock & Box · Boxing Talents</div>
+          <p>Cartelera con estética fight-poster, cinturón dorado y modo campeonato.</p>
           <div class="cta-group">
             <a class="cta" href="#fighters">Boxeadores destacados</a>
             <a class="cta secondary" href="#events">Próximos eventos</a>
@@ -222,31 +397,7 @@
 
         <section id="bracket">
           <h2 class="section-title">Bracket actual de la liga</h2>
-          ${activeBracket ? `
-            <article class="card">
-              <strong>${activeBracket.name}</strong>
-              ${activeBracket.rounds.map(r => `
-                <div class="match">
-                  <p><span class="tag">${r.name}</span></p>
-                  ${r.matches.map(m => {
-                    const f1 = state.fighters.find(f => f.id === m.fighter1Id)?.name || 'N/D';
-                    const f2 = state.fighters.find(f => f.id === m.fighter2Id)?.name || 'N/D';
-                    const winnerName = state.fighters.find(f => f.id === m.winnerId)?.name;
-                    return `
-                      <div class="card">
-                        <p>${f1} vs ${f2}</p>
-                        <p class="record">Ganador: ${winnerName || 'Sin definir'}</p>
-                      </div>
-                    `;
-                  }).join('')}
-                </div>
-              `).join('')}
-            </article>
-          ` : `
-            <article class="card">
-              <p>No hay un bracket activo en este momento.</p>
-            </article>
-          `}
+          ${renderBracketGraphic(activeBracket)}
         </section>
       `;
     }
