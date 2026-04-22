@@ -17,7 +17,7 @@
       display:inline-block; margin-top:12px; padding:10px 14px; background:var(--gold); color:#111;
       border:none; border-radius:6px; cursor:pointer; font-weight:700;
     }
-    button.secondary, .tab.secondary { background: transparent; color: var(--text); border: 1px solid var(--border); }
+    button.secondary, .tab.secondary, .cta.secondary { background: transparent; color: var(--text); border: 1px solid var(--border); }
     .topbar { display:flex; gap:12px; justify-content:space-between; align-items:center; flex-wrap:wrap; }
     .tabs { display:flex; gap:8px; flex-wrap:wrap; margin: 18px 0; }
     .tab.active { background: var(--gold2); }
@@ -30,6 +30,7 @@
     .section-title { font-size:26px; margin:18px 0 10px; }
     .tag { display:inline-block; padding:4px 8px; border:1px solid var(--border); border-radius:999px; color:var(--gold); font-size:12px; margin-bottom:10px; }
     .record { margin-top:8px; color:var(--muted); }
+    .cta-group { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:12px; }
     .hidden { display:none !important; }
     .admin-shell { display:grid; grid-template-columns: 220px 1fr; gap:16px; }
     .admin-menu { display:flex; flex-direction:column; gap:8px; }
@@ -141,25 +142,54 @@
       return null;
     }
 
+    function toDateOnly(value) {
+      const date = new Date(value + 'T00:00:00');
+      if (Number.isNaN(date.getTime())) return null;
+      return date;
+    }
+
+    function getTodayDateOnly() {
+      const now = new Date();
+      return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    }
+
+    function getUpcomingEvents(events) {
+      const today = getTodayDateOnly();
+      return events
+        .filter(e => {
+          const date = toDateOnly(e.date);
+          return date && date >= today;
+        })
+        .sort((a, b) => toDateOnly(a.date) - toDateOnly(b.date));
+    }
+
+    function getActiveBracket(brackets) {
+      return brackets.find(b => b.isActive) || null;
+    }
+
     function publicView() {
-      const categoriesCount = new Set(state.fighters.map(f => f.category)).size;
+      const upcomingEvents = getUpcomingEvents(state.events);
+      const activeBracket = getActiveBracket(state.brackets);
       return `
         <section class="hero">
           <p class="label">Liga oficial · MVP1</p>
           <h1>BOXING <span>TALENTS</span></h1>
           <p>Listado y estadísticas renderizadas dinámicamente desde estado persistido.</p>
-          <a class="cta" href="#fighters">Ver boxeadores</a>
+          <div class="cta-group">
+            <a class="cta" href="#fighters">Boxeadores destacados</a>
+            <a class="cta secondary" href="#events">Próximos eventos</a>
+            <a class="cta secondary" href="#bracket">Bracket actual</a>
+          </div>
         </section>
 
         <section class="stats">
           <div class="card"><div class="num">${state.fighters.length}</div><div class="label">Boxeadores</div></div>
-          <div class="card"><div class="num">${categoriesCount}</div><div class="label">Categorías</div></div>
           <div class="card"><div class="num">${state.events.length}</div><div class="label">Eventos</div></div>
-          <div class="card"><div class="num">${state.brackets.length}</div><div class="label">Brackets</div></div>
+          <div class="card"><div class="num">${activeBracket ? 1 : 0}</div><div class="label">Bracket activo</div></div>
         </section>
 
         <section id="fighters">
-          <h2 class="section-title">Talents destacados</h2>
+          <h2 class="section-title">Boxeadores destacados</h2>
           <div class="grid">
             ${state.fighters.map(f => `
               <article class="card fighter">
@@ -169,6 +199,54 @@
                 <div class="record">${f.wins}-${f.losses}-${f.draws} · ${f.kos} KO · ${f.weight}kg</div>
               </article>`).join('')}
           </div>
+        </section>
+
+        <section id="events">
+          <h2 class="section-title">Próximos eventos</h2>
+          ${upcomingEvents.length ? `
+            <div class="list">
+              ${upcomingEvents.map(e => `
+                <article class="card">
+                  <strong>${e.name}</strong>
+                  <p>${e.date} · ${e.venue}</p>
+                  <p class="tag">${e.status}</p>
+                </article>
+              `).join('')}
+            </div>
+          ` : `
+            <article class="card">
+              <p>No hay eventos futuros programados.</p>
+            </article>
+          `}
+        </section>
+
+        <section id="bracket">
+          <h2 class="section-title">Bracket actual de la liga</h2>
+          ${activeBracket ? `
+            <article class="card">
+              <strong>${activeBracket.name}</strong>
+              ${activeBracket.rounds.map(r => `
+                <div class="match">
+                  <p><span class="tag">${r.name}</span></p>
+                  ${r.matches.map(m => {
+                    const f1 = state.fighters.find(f => f.id === m.fighter1Id)?.name || 'N/D';
+                    const f2 = state.fighters.find(f => f.id === m.fighter2Id)?.name || 'N/D';
+                    const winnerName = state.fighters.find(f => f.id === m.winnerId)?.name;
+                    return `
+                      <div class="card">
+                        <p>${f1} vs ${f2}</p>
+                        <p class="record">Ganador: ${winnerName || 'Sin definir'}</p>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              `).join('')}
+            </article>
+          ` : `
+            <article class="card">
+              <p>No hay un bracket activo en este momento.</p>
+            </article>
+          `}
         </section>
       `;
     }
@@ -275,6 +353,10 @@
           ${state.brackets.map(b => `
             <article class="card">
               <strong>${b.name}</strong>
+              <p class="record">${b.isActive ? 'Bracket activo' : 'Bracket inactivo'}</p>
+              <div class="item-actions">
+                <button data-action="set-active-bracket" data-id="${b.id}" class="secondary">Marcar como activo</button>
+              </div>
               ${b.rounds.map((r, ri) => `
                 <div class="match">
                   <p><span class="tag">${r.name}</span></p>
@@ -448,10 +530,18 @@
 
           setState(s => ({
             ...s,
-            brackets: [...s.brackets, { id: crypto.randomUUID(), name, rounds: [{ name: roundName, matches }] }]
+            brackets: [...s.brackets, { id: crypto.randomUUID(), name, rounds: [{ name: roundName, matches }], isActive: s.brackets.length === 0 }]
           }));
         };
       }
+
+      document.querySelectorAll('[data-action="set-active-bracket"]').forEach(btn => btn.onclick = () => {
+        const targetId = btn.dataset.id;
+        setState(s => ({
+          ...s,
+          brackets: s.brackets.map(b => ({ ...b, isActive: b.id === targetId }))
+        }));
+      });
 
       document.querySelectorAll('[data-action="pick-winner"]').forEach(btn => btn.onclick = () => {
         const { bid, ri, mi, wid } = btn.dataset;
