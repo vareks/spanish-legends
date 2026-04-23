@@ -52,6 +52,17 @@
       mask-image: linear-gradient(180deg, rgba(0,0,0,.92), rgba(0,0,0,.45));
     }
 
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(180deg, transparent 0 8%, rgba(181,20,47,.16) 8% 8.4%, transparent 8.4% 15%, rgba(201,168,76,.16) 15% 15.4%, transparent 15.4% 100%);
+      opacity: .55;
+      mix-blend-mode: screen;
+    }
+
     a { color: inherit; text-decoration: none; }
 
     .wrap {
@@ -169,7 +180,7 @@
     }
 
     .hero::after {
-      content: "BOXING TALENTS";
+      content: "FIGHT NIGHT";
       position: absolute;
       right: -18px;
       bottom: -18px;
@@ -178,6 +189,16 @@
       line-height: .9;
       color: rgba(255,255,255,.03);
       pointer-events: none;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 14px;
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: calc(var(--radius) + 4px);
+      pointer-events: none;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.02);
     }
 
     .hero-grid {
@@ -287,6 +308,35 @@
 
     .promo-card strong { font-size: 18px; }
     .promo-card p { color: #d8ccb2; line-height: 1.55; }
+
+    .impact-strip {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .impact-pill {
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.015));
+    }
+
+    .impact-pill strong {
+      display: block;
+      font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+      font-size: 26px;
+      line-height: .88;
+      color: var(--gold-2);
+    }
+
+    .impact-pill span {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      color: var(--muted);
+    }
 
     .stats {
       display: grid;
@@ -506,6 +556,15 @@
       transform: translateY(-50%);
     }
 
+    .match-card::after {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.03);
+      pointer-events: none;
+    }
+
     .round-col:last-child .match-card::before,
     .champion-col .match-card::before { display: none; }
 
@@ -711,6 +770,7 @@
       .bracket-grid { grid-auto-columns: minmax(270px, 1fr); }
       .round-col,
       .champion-col { min-width: 270px; }
+      .impact-strip { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -1031,9 +1091,9 @@
         <article class="card bracket-shell">
           <div class="bracket-meta">
             <div>
-              <div class="eyebrow">Rockanbox inspired bracket</div>
+              <div class="eyebrow">Fight card bracket · league mode</div>
               <div class="bracket-name">${bracket.name}</div>
-              <p class="bracket-subcopy">Diseño visual de torneo con look editorial: cartelería oscura, contraste dorado y tarjetas de combate estilo liga premium.</p>
+              <p class="bracket-subcopy">Bracket con lectura de cartelera: cruces visibles, sensación de cuadro oficial y tarjetas pensadas para una noche de boxeo, no solo para un dashboard.</p>
             </div>
             <div class="brand-row">
               <span class="belt-mark">Season ${bracket.season || '2026'}</span>
@@ -1052,7 +1112,7 @@
                   ${round.matches.map((match, matchIndex) => {
                     const fighter1 = fighterById(match.fighter1Id);
                     const fighter2 = fighterById(match.fighter2Id);
-                    const matchTitle = fighter1 && fighter2 ? `${fighter1.name.split(' ')[0]} vs ${fighter2.name.split(' ')[0]}` : `Fight ${matchIndex + 1}`;
+                    const matchTitle = fighter1 && fighter2 ? `${fighter1.name.split(' ')[0]} vs ${fighter2.name.split(' ')[0]}` : `Bout ${matchIndex + 1}`;
                     return `
                       <article class="match-card">
                         <div class="match-topline">
@@ -1061,7 +1121,7 @@
                         </div>
                         ${renderFighterSlot(match, match.fighter1Id, 'A', match.winnerId && match.winnerId === match.fighter1Id)}
                         ${renderFighterSlot(match, match.fighter2Id, 'B', match.winnerId && match.winnerId === match.fighter2Id)}
-                        <p class="match-note">${match.scheduled ? `Horario estimado · ${match.scheduled}` : 'Esperando resultado para avanzar al siguiente cuadro.'}</p>
+                        <p class="match-note">${match.scheduled ? `Walkout estimado · ${match.scheduled}` : 'Esperando decisión oficial para cerrar el pase a la siguiente esquina del cuadro.'}</p>
                       </article>
                     `;
                   }).join('')}
@@ -1070,15 +1130,15 @@
               <section class="round-col champion-col">
                 <div>
                   <span class="round-title">Champion</span>
-                  <p class="round-subtitle">Cinturón Boxing Talents</p>
+                  <p class="round-subtitle">Cinturón Spanish Legends</p>
                 </div>
                 <article class="champion-card">
                   <img src="${champion?.photo || placeholderPhoto(champion?.name || 'Champion')}" alt="${champion?.name || 'Champion'}" loading="lazy" />
                   <div class="champion-name">${champion ? champion.name : '<span>Pending</span> Winner'}</div>
                   <p class="champion-copy">${champion ? `${champion.city} · ${champion.category} · ${champion.wins}-${champion.losses}-${champion.draws}` : 'La tarjeta final queda lista para coronar al campeón cuando se cierre la última pelea.'}</p>
                   <div class="brand-row">
-                    <span class="belt-mark">Fight Night</span>
-                    <span class="brand-pill">Premium bracket</span>
+                    <span class="belt-mark">Main Event</span>
+                    <span class="brand-pill">Championship board</span>
                   </div>
                 </article>
               </section>
@@ -1097,30 +1157,35 @@
         <section class="hero">
           <div class="hero-grid">
             <div class="hero-copy">
-              <div class="eyebrow">Combat sports landing · editorial dark mode</div>
-              <h2 class="hero-title">BOXING <span>TALENTS</span></h2>
-              <p class="hero-description">Rediseño inspirado en la estética reciente de Rockanbox: contraste oscuro, dorado premium, cartelería de evento y un bracket visual más cercano a una liga profesional.</p>
+              <div class="eyebrow">Spanish Legends · boxing promotion landing</div>
+              <h2 class="hero-title">SPANISH <span>LEGENDS</span></h2>
+              <p class="hero-description">La interfaz ahora cae mucho más en territorio boxeo: atmósfera de velada, jerarquía de cartel, guiños a cuerdas de ring y un bracket que se siente como cuadro oficial de torneo.</p>
               <div class="hero-actions">
                 <a class="cta" href="#bracket">Ver bracket gráfico</a>
                 <a class="cta secondary" href="#fighters">Roster</a>
                 <a class="cta secondary" href="#events">Eventos</a>
               </div>
               <div class="brand-row" style="margin-top:18px;">
-                <span class="belt-mark">Rock &amp; Box feel</span>
-                <span class="brand-pill">Boxing Talents</span>
+                <span class="belt-mark">Fight Night Identity</span>
+                <span class="brand-pill">Spanish Legends</span>
                 <span class="brand-pill">Live bracket</span>
+              </div>
+              <div class="impact-strip">
+                <div class="impact-pill"><strong>12</strong><span>round energy</span></div>
+                <div class="impact-pill"><strong>KO</strong><span>visual language</span></div>
+                <div class="impact-pill"><strong>PPV</strong><span>fight-card feel</span></div>
               </div>
             </div>
             <div class="hero-side">
               <article class="hero-poster">
                 <div class="poster-kicker">Main event visual</div>
-                <div class="poster-title">Talent <span style="color:var(--gold-2);">Bracket</span></div>
-                <p class="poster-subtitle">Un lenguaje visual más premium y contundente, con bloques tipo cartel y jerarquía clara.</p>
+                <div class="poster-title">Ring <span style="color:var(--gold-2);">Wars</span></div>
+                <p class="poster-subtitle">Cartel más agresivo, más arena y más sensación de combate profesional.</p>
               </article>
               <article class="promo-card">
                 <div class="eyebrow">Current spotlight</div>
                 <strong>${champion ? champion.name : activeBracket?.name || 'Championship mode'}</strong>
-                <p>${champion ? `Camino al cinturón abierto para ${champion.category}.` : 'Final pendiente con visual de campeonato, listo para usarse como home principal de la liga.'}</p>
+                <p>${champion ? `Aspirante destacado al cinturón en ${champion.category}, con presencia de main event.` : 'Final pendiente con presencia de gran velada, listo para vender cartelera desde home.'}</p>
               </article>
             </div>
           </div>
@@ -1130,17 +1195,17 @@
           <article class="card stat-card">
             <div class="label">Boxeadores en roster</div>
             <div class="stat-number">${state.fighters.length}</div>
-            <p class="stat-copy">Perfiles con foto, récord y señales visuales más editoriales.</p>
+            <p class="stat-copy">Perfiles con presencia de fighter card, récord visible y lectura inmediata de esquina.</p>
           </article>
           <article class="card stat-card">
             <div class="label">Eventos próximos</div>
             <div class="stat-number">${upcomingEvents.length}</div>
-            <p class="stat-copy">Calendario listo para presentar veladas y open calls.</p>
+            <p class="stat-copy">Calendario listo para anunciar veladas, pesajes y noches de campeonato.</p>
           </article>
           <article class="card stat-card">
             <div class="label">Brackets activos</div>
             <div class="stat-number">${activeBracket ? 1 : 0}</div>
-            <p class="stat-copy">Vista torneo con progresión visual entre rondas.</p>
+            <p class="stat-copy">Cuadro de torneo con progresión visual y narrativa de combate.</p>
           </article>
         </section>
 
@@ -1148,9 +1213,9 @@
           <div class="section-head">
             <div>
               <div class="eyebrow">Roster</div>
-              <h2 class="section-title">Featured <span>fighters</span></h2>
+              <h2 class="section-title">Fight <span>roster</span></h2>
             </div>
-            <p class="section-copy">Las fichas ahora respiran más como una pieza de marca: foto dominante, microdatos claros y métricas bien jerarquizadas.</p>
+            <p class="section-copy">Las fichas empujan más hacia un universo de boxeo real: foto dominante, récord al frente y sensación de póster de presentación.</p>
           </div>
           <div class="grid fighters-grid">
             ${state.fighters.map(f => `
@@ -1180,10 +1245,10 @@
         <section id="events" class="section">
           <div class="section-head">
             <div>
-              <div class="eyebrow">Calendar</div>
-              <h2 class="section-title">Upcoming <span>events</span></h2>
+              <div class="eyebrow">Fight calendar</div>
+              <h2 class="section-title">Upcoming <span>fight nights</span></h2>
             </div>
-            <p class="section-copy">Bloques de evento más potentes visualmente para comunicar sede, fecha y estado de forma limpia.</p>
+            <p class="section-copy">Las veladas se presentan como cartelera: sede, fecha y estado con más tensión visual y menos pinta de dashboard genérico.</p>
           </div>
           ${upcomingEvents.length ? `
             <div class="grid events-grid">
@@ -1197,7 +1262,7 @@
                   <p class="event-meta">${e.venue}</p>
                   <div class="brand-row">
                     <span class="brand-pill">Fight Night</span>
-                    <span class="brand-pill">Tickets soon</span>
+                    <span class="brand-pill">Weigh-in soon</span>
                   </div>
                 </article>
               `).join('')}
@@ -1210,10 +1275,10 @@
         <section id="bracket" class="section">
           <div class="section-head">
             <div>
-              <div class="eyebrow">Tournament view</div>
-              <h2 class="section-title">Graphic <span>bracket</span></h2>
+              <div class="eyebrow">Tournament board</div>
+              <h2 class="section-title">Official <span>bracket</span></h2>
             </div>
-            <p class="section-copy">Rehecho para que parezca una liga real: columnas por ronda, tarjetas de combate, avance visual y tarjeta final de campeón.</p>
+            <p class="section-copy">Refinado para parecer un cuadro oficial de campeonato: columnas de rondas, narrativa de combates y cierre visual de cinturón.</p>
           </div>
           ${renderBracketGraphic(activeBracket)}
         </section>
@@ -1381,8 +1446,8 @@
       app.innerHTML = `
         <div class="topbar">
           <div>
-            <p class="label">Rockanbox-inspired redesign</p>
-            <h1 class="page-title">Boxing <span>Talents</span></h1>
+            <p class="label">Spanish Legends · fight-night redesign</p>
+            <h1 class="page-title">Spanish <span>Legends</span></h1>
           </div>
           <div class="tabs">
             <button class="tab ${state.ui.activeTab === 'public' ? 'active' : 'secondary'}" data-action="set-tab" data-tab="public">Público</button>
@@ -1390,7 +1455,7 @@
           </div>
         </div>
         ${state.ui.activeTab === 'public' ? publicView() : adminView()}
-        <footer>Boxing Talents · Rediseño visual con bracket gráfico y estética editorial premium.</footer>
+        <footer>Spanish Legends · estética fight-night, bracket oficial y presencia más cercana al boxeo profesional.</footer>
       `;
       bindEvents();
     }
