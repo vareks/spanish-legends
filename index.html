@@ -3,249 +3,715 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Boxing Talents — MVP1</title>
+  <title>Boxing Talents — Rockanbox Edition</title>
   <style>
     :root {
-      --gold:#C9A84C; --gold2:#F0D060; --red:#9f0e24; --blue:#0f8bb6;
-      --bg:#060606; --bg2:#12100e; --bg3:#1a1714; --border:#3d2f15;
-      --text:#f8f2df; --muted:#b4aa8a; --ok:#277d49;
-      --poster-shadow: 0 14px 42px rgba(0,0,0,.45);
+      --gold: #c9a84c;
+      --gold-2: #f6d878;
+      --gold-soft: rgba(201, 168, 76, 0.18);
+      --red: #b5142f;
+      --red-soft: rgba(181, 20, 47, 0.18);
+      --ink: #090909;
+      --panel: #121212;
+      --panel-2: #171717;
+      --panel-3: #1f1f1f;
+      --line: rgba(255,255,255,.08);
+      --text: #f4efe2;
+      --muted: #b7ad92;
+      --success: #55b578;
+      --danger: #ff7c7c;
+      --shadow: 0 24px 50px rgba(0,0,0,.38);
+      --radius: 22px;
     }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
     body {
-      font-family: Impact, "Arial Black", Arial, Helvetica, sans-serif;
-      background:
-        radial-gradient(circle at 15% 20%, rgba(201,168,76,.2), transparent 40%),
-        radial-gradient(circle at 85% 10%, rgba(15,139,182,.22), transparent 45%),
-        linear-gradient(180deg,#080706,#12100e 55%, #0a0908);
-      color: var(--text);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       min-height: 100vh;
-      letter-spacing: .2px;
-    }
-    .wrap { max-width: 1200px; margin: 0 auto; padding: 24px; }
-    .hero { padding: 42px 0 22px; text-align: center; position:relative; }
-    .hero::before {
-      content:"";
-      position:absolute;
-      inset: 0;
-      background:
-        linear-gradient(160deg, rgba(255,255,255,.05), transparent 35%),
-        linear-gradient(20deg, rgba(201,168,76,.16), transparent 38%);
-      border:1px solid var(--border);
-      border-radius: 14px;
-      z-index:-1;
-      box-shadow: var(--poster-shadow);
-    }
-    h1 { font-size: clamp(34px, 6vw, 56px); letter-spacing: 2.2px; text-transform: uppercase; }
-    h1 span { color: var(--gold); }
-    p { color: var(--muted); font-family: "Trebuchet MS", Arial, sans-serif; }
-    .cta, button, .tab {
-      display:inline-block; margin-top:12px; padding:10px 14px; background:linear-gradient(180deg, var(--gold2), var(--gold)); color:#111;
-      border:1px solid #8f722e; border-radius:8px; cursor:pointer; font-weight:700;
-      text-transform: uppercase;
-      letter-spacing: .8px;
-    }
-    button.secondary, .tab.secondary, .cta.secondary {
-      background: linear-gradient(180deg, #181612, #12100d);
       color: var(--text);
-      border: 1px solid var(--border);
-    }
-    .topbar { display:flex; gap:12px; justify-content:space-between; align-items:center; flex-wrap:wrap; }
-    .tabs { display:flex; gap:8px; flex-wrap:wrap; margin: 18px 0; }
-    .tab.active { background: linear-gradient(180deg, var(--gold2), var(--gold)); }
-    .stats, .grid { display:grid; gap:16px; }
-    .stats { grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); margin: 14px 0 24px; }
-    .grid { grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); }
-    .card {
       background:
-        linear-gradient(170deg, rgba(255,255,255,.05), transparent 36%),
-        linear-gradient(180deg, var(--bg3), var(--bg2));
-      border:1px solid var(--border);
-      padding:16px;
-      border-radius:12px;
-      box-shadow: var(--poster-shadow);
+        radial-gradient(circle at 12% 12%, rgba(201, 168, 76, .12), transparent 22%),
+        radial-gradient(circle at 88% 10%, rgba(181, 20, 47, .16), transparent 28%),
+        linear-gradient(180deg, #050505, #0c0c0c 40%, #080808 100%);
+      letter-spacing: .1px;
     }
-    .num { font-size:34px; color:var(--gold2); font-weight:700; }
-    .label { font-size:12px; text-transform:uppercase; letter-spacing:1.5px; color:var(--muted); }
-    .section-title { font-size:26px; margin:18px 0 10px; }
-    .tag {
-      display:inline-block;
-      padding:4px 10px;
-      border:1px solid #7d6428;
-      border-radius:999px;
-      color:var(--gold2);
-      background:rgba(201,168,76,.15);
-      font-size:12px;
-      margin-bottom:10px;
-    }
-    .record { margin-top:8px; color:var(--muted); }
-    .cta-group { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:12px; }
-    .hidden { display:none !important; }
-    .admin-shell { display:grid; grid-template-columns: 220px 1fr; gap:16px; }
-    .admin-menu { display:flex; flex-direction:column; gap:8px; }
-    .admin-panel h3 { margin-bottom:12px; }
-    form { display:grid; gap:8px; margin-bottom: 16px; }
-    input, select {
-      background:#0b0a08; color:var(--text); border:1px solid var(--border); border-radius:6px; padding:8px;
-    }
-    .form-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap:8px; }
-    .list { display:grid; gap:10px; }
-    .item-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
-    .err { color: #ff7777; font-size: 13px; }
-    .ok { color: #90dfae; font-size: 13px; }
-    .match { border-top:1px dashed var(--border); margin-top:8px; padding-top:8px; }
-    footer { padding:40px 0; color:var(--muted); text-align:center; }
-    .belt-mark {
-      display:inline-block;
-      margin: 8px 0 12px;
-      background: radial-gradient(circle at 30% 30%, #fff6cb, #d6ab32 45%, #8b6a1f);
-      color:#201806;
-      border:2px solid #f8dd8e;
-      border-radius: 999px;
-      font-size: 12px;
-      padding: 6px 14px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      box-shadow: inset 0 0 12px rgba(255,255,255,.28), 0 4px 18px rgba(0,0,0,.35);
-    }
-    .bracket-graphic { overflow-x:auto; padding-bottom:8px; }
-    .bracket-grid {
-      display:grid;
-      grid-auto-flow: column;
-      grid-auto-columns: minmax(250px, 1fr);
-      gap: 18px;
-      min-width: max-content;
-      align-items:start;
-      margin-top: 10px;
-      padding: 8px 8px 18px;
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .12;
       background-image:
-        linear-gradient(180deg, rgba(255,255,255,.03) 1px, transparent 1px),
+        linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
-      background-size: 100% 30px, 30px 100%;
-      border-radius: 12px;
+      background-size: 100% 32px, 32px 100%;
+      mask-image: linear-gradient(180deg, rgba(0,0,0,.92), rgba(0,0,0,.45));
     }
-    .round-col { display:grid; gap: 12px; position:relative; padding-right: 16px; }
-    .round-title {
-      display:inline-block;
-      padding: 6px 10px;
-      border: 1px solid #6d5622;
-      border-radius: 8px;
-      background: linear-gradient(180deg, rgba(201,168,76,.26), rgba(201,168,76,.1));
-      color: #faebbb;
-      font-family: "Trebuchet MS", Arial, sans-serif;
-      font-weight: 700;
-      letter-spacing: .4px;
+
+    a { color: inherit; text-decoration: none; }
+
+    .wrap {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 24px;
+      position: relative;
+      z-index: 1;
     }
-    .round-col:not(:last-child)::after {
-      content: "";
-      position:absolute;
-      right: 2px;
-      top: 45px;
-      bottom: 6px;
-      width: 2px;
-      background: linear-gradient(180deg, transparent, rgba(201,168,76,.45), transparent);
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: center;
+      flex-wrap: wrap;
+      padding-bottom: 16px;
     }
-    .bracket-match {
-      border:1px solid #5a461c;
-      background: linear-gradient(180deg, #14110d, #100e0b);
-      border-radius: 10px;
-      padding: 10px;
-      position:relative;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.03), 0 8px 20px rgba(0,0,0,.32);
+
+    .eyebrow,
+    .label,
+    .micro-copy {
+      text-transform: uppercase;
+      letter-spacing: .22em;
+      font-size: 11px;
+      color: var(--muted);
     }
-    .bracket-match::before {
-      content: "";
-      position:absolute;
-      left: -8px;
-      top: 50%;
-      width: 8px;
-      height: 2px;
-      background: rgba(201,168,76,.5);
+
+    .page-title,
+    .hero-title,
+    .section-title,
+    .fighter-name,
+    .event-name,
+    .match-vs,
+    .champion-name {
+      font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+      letter-spacing: .04em;
+      text-transform: uppercase;
     }
-    .bracket-match::after {
-      content: "";
-      position:absolute;
-      right: -14px;
-      top: 50%;
-      width: 14px;
-      height: 36px;
-      transform: translateY(-50%);
-      border-right: 2px solid rgba(201,168,76,.45);
-      border-top: 2px solid rgba(201,168,76,.45);
-      border-bottom: 2px solid rgba(201,168,76,.45);
-      border-radius: 0 10px 10px 0;
+
+    .page-title {
+      font-size: clamp(32px, 5vw, 48px);
+      line-height: .95;
+    }
+
+    .page-title span,
+    .hero-title span,
+    .section-title span,
+    .champion-name span {
+      color: var(--gold-2);
+    }
+
+    .tabs,
+    .cta-group,
+    .hero-actions,
+    .fighter-badges,
+    .brand-row,
+    .item-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button,
+    .cta,
+    .tab {
+      appearance: none;
+      border: 1px solid rgba(255,255,255,.08);
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.02));
+      color: var(--text);
+      border-radius: 999px;
+      padding: 12px 18px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+      box-shadow: 0 8px 18px rgba(0,0,0,.18);
+    }
+
+    button:hover,
+    .cta:hover,
+    .tab:hover { transform: translateY(-1px); }
+
+    .cta,
+    .tab.active,
+    button:not(.secondary):not(.ghost) {
+      background: linear-gradient(180deg, var(--gold-2), var(--gold));
+      color: #17120a;
+      border-color: #8f722e;
+    }
+
+    .secondary,
+    .ghost,
+    .tab.secondary {
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01));
+      color: var(--text);
+      border-color: rgba(255,255,255,.08);
+    }
+
+    .hero {
+      position: relative;
+      padding: 34px;
+      border-radius: calc(var(--radius) + 8px);
+      overflow: hidden;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.06), transparent 30%),
+        radial-gradient(circle at 80% 20%, rgba(181,20,47,.18), transparent 24%),
+        radial-gradient(circle at 15% 30%, rgba(201,168,76,.16), transparent 22%),
+        linear-gradient(145deg, #101010 0%, #0d0d0d 50%, #151515 100%);
+      border: 1px solid rgba(255,255,255,.08);
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    .hero::after {
+      content: "BOXING TALENTS";
+      position: absolute;
+      right: -18px;
+      bottom: -18px;
+      font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+      font-size: clamp(68px, 14vw, 160px);
+      line-height: .9;
+      color: rgba(255,255,255,.03);
       pointer-events: none;
     }
-    .round-col:last-child .bracket-match::after { display:none; }
-    .fighter-slot {
-      display:flex; justify-content:space-between; gap:8px;
-      font-family: "Trebuchet MS", Arial, sans-serif;
-      font-size: 13px; padding:6px 8px; border-radius: 8px;
-      border: 1px solid transparent;
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(320px, .8fr);
+      gap: 24px;
+      align-items: end;
     }
-    .fighter-slot + .fighter-slot { margin-top: 6px; }
-    .fighter-slot.winner {
-      border-color: #90722d;
-      color: #fdf2cb;
-      background: linear-gradient(90deg, rgba(201,168,76,.28), rgba(201,168,76,.05));
+
+    .hero-copy { max-width: 720px; }
+
+    .hero-title {
+      font-size: clamp(50px, 9vw, 100px);
+      line-height: .88;
+      margin: 10px 0 12px;
     }
-    .fighter-slot.pending {
-      color: #d7d1bc;
-      background: linear-gradient(90deg, rgba(255,255,255,.04), rgba(255,255,255,.01));
+
+    .hero-description {
+      max-width: 62ch;
+      color: #d9ceb0;
+      line-height: 1.6;
+      font-size: 15px;
     }
-    .fighter-slot .seed { color: #ebc866; font-size: 12px; }
-    .fighter-profile {
-      display:grid;
-      grid-template-columns: 86px 1fr;
-      gap: 12px;
-      align-items:start;
-    }
-    .fighter-photo {
-      width:86px;
-      height:106px;
-      border-radius:8px;
-      border:1px solid #6c5522;
-      object-fit: cover;
-      background: #101010;
-      box-shadow: 0 10px 24px rgba(0,0,0,.35);
-    }
-    .fighter-meta h3 { line-height: 1.1; }
-    .fighter-badges {
-      display:flex;
-      gap: 6px;
-      flex-wrap:wrap;
-      margin-top:8px;
-    }
-    .fighter-badge {
-      border:1px solid #5f4a1e;
-      background: rgba(201,168,76,.11);
-      color: #efd58a;
+
+    .hero-actions { margin-top: 20px; }
+
+    .hero-badges,
+    .fighter-badge,
+    .event-badge,
+    .round-title,
+    .status-chip,
+    .brand-pill,
+    .belt-mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
       border-radius: 999px;
-      padding:2px 8px;
+      border: 1px solid rgba(255,255,255,.1);
+      padding: 7px 12px;
       font-size: 11px;
-      font-family: "Trebuchet MS", Arial, sans-serif;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      font-weight: 700;
     }
-    .brand-strip {
-      border-top:1px solid var(--border);
-      margin-top:14px;
-      padding-top:12px;
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      justify-content:center;
+
+    .belt-mark,
+    .round-title,
+    .hero-badge--gold,
+    .fighter-badge--gold {
+      color: #1c1407;
+      background: linear-gradient(180deg, var(--gold-2), var(--gold));
+      border-color: #8f722e;
     }
-    .brand-pill {
-      border:1px solid #2f2b21;
-      background: linear-gradient(180deg, #111, #090909);
-      color:#d5c9a2;
-      border-radius:999px;
-      padding:5px 10px;
-      font-size:11px;
-      letter-spacing:.8px;
-      text-transform:uppercase;
-      font-family: "Trebuchet MS", Arial, sans-serif;
+
+    .hero-badge--dark,
+    .fighter-badge,
+    .event-badge,
+    .brand-pill,
+    .status-chip {
+      color: #eadfbe;
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
     }
-    @media (max-width: 900px) { .admin-shell { grid-template-columns: 1fr; } }
+
+    .hero-side {
+      display: grid;
+      gap: 16px;
+    }
+
+    .hero-poster,
+    .promo-card,
+    .card {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.015)),
+        linear-gradient(180deg, var(--panel-3), var(--panel));
+      border: 1px solid rgba(255,255,255,.08);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-poster {
+      min-height: 260px;
+      padding: 22px;
+      display: grid;
+      align-content: end;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,.06), rgba(0,0,0,.6)),
+        radial-gradient(circle at 50% 18%, rgba(255,255,255,.12), transparent 20%),
+        linear-gradient(160deg, rgba(181,20,47,.35), rgba(0,0,0,0) 42%),
+        linear-gradient(210deg, rgba(201,168,76,.3), rgba(0,0,0,0) 38%),
+        linear-gradient(180deg, #1f1910 0%, #0d0d0d 100%);
+    }
+
+    .poster-kicker { color: #f3df9f; font-size: 12px; text-transform: uppercase; letter-spacing: .18em; }
+    .poster-title { font-size: clamp(28px, 5vw, 44px); line-height: .92; }
+    .poster-subtitle { color: #d8ccb0; max-width: 28ch; line-height: 1.5; }
+
+    .promo-card {
+      padding: 18px;
+      display: grid;
+      gap: 10px;
+      background:
+        linear-gradient(180deg, rgba(181,20,47,.12), rgba(255,255,255,.02)),
+        linear-gradient(180deg, #151515, #0f0f0f);
+    }
+
+    .promo-card strong { font-size: 18px; }
+    .promo-card p { color: #d8ccb2; line-height: 1.55; }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .stat-card {
+      padding: 22px;
+      min-height: 142px;
+      display: grid;
+      gap: 10px;
+      align-content: end;
+    }
+
+    .stat-number {
+      font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+      font-size: clamp(36px, 5vw, 56px);
+      line-height: .9;
+      color: var(--gold-2);
+    }
+
+    .stat-copy { color: var(--muted); line-height: 1.5; font-size: 14px; }
+
+    .section { margin-top: 28px; }
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: end;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .section-title {
+      font-size: clamp(30px, 5vw, 44px);
+      line-height: .92;
+    }
+
+    .section-copy {
+      color: var(--muted);
+      max-width: 62ch;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .grid { display: grid; gap: 18px; }
+    .fighters-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+    .events-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+    .list { display: grid; gap: 12px; }
+
+    .card { padding: 18px; }
+
+    .fighter-card {
+      display: grid;
+      gap: 16px;
+      min-height: 100%;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.015)),
+        linear-gradient(180deg, #181818, #101010);
+    }
+
+    .fighter-hero {
+      position: relative;
+      display: grid;
+      grid-template-columns: 112px 1fr;
+      gap: 14px;
+      align-items: end;
+    }
+
+    .fighter-photo {
+      width: 112px;
+      height: 144px;
+      border-radius: 18px;
+      object-fit: cover;
+      border: 1px solid rgba(255,255,255,.09);
+      background: #101010;
+      box-shadow: 0 16px 26px rgba(0,0,0,.3);
+    }
+
+    .fighter-name { font-size: 30px; line-height: .92; }
+    .fighter-meta,
+    .record,
+    .event-meta,
+    .round-subtitle,
+    .match-note,
+    .empty-state,
+    footer,
+    .form-help,
+    .err,
+    .ok { font-size: 14px; line-height: 1.55; color: var(--muted); }
+
+    .fighter-record {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .fighter-stat {
+      padding: 12px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.06);
+    }
+
+    .fighter-stat strong {
+      display: block;
+      font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+      font-size: 28px;
+      line-height: .9;
+      color: var(--gold-2);
+    }
+
+    .fighter-stat span { font-size: 11px; text-transform: uppercase; letter-spacing: .14em; color: var(--muted); }
+
+    .event-card {
+      min-height: 100%;
+      display: grid;
+      gap: 14px;
+      padding: 20px;
+    }
+
+    .event-name { font-size: 30px; line-height: .95; }
+
+    .event-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .bracket-shell {
+      padding: 22px;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(201,168,76,.08), transparent 25%),
+        linear-gradient(180deg, #141414, #0d0d0d);
+    }
+
+    .bracket-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .bracket-name {
+      font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+      font-size: clamp(32px, 5vw, 48px);
+      line-height: .92;
+      text-transform: uppercase;
+    }
+
+    .bracket-subcopy { color: var(--muted); line-height: 1.55; }
+
+    .bracket-graphic {
+      overflow-x: auto;
+      padding-bottom: 12px;
+    }
+
+    .bracket-grid {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(300px, 1fr);
+      gap: 28px;
+      min-width: max-content;
+      align-items: start;
+      padding: 10px 8px 18px;
+    }
+
+    .round-col {
+      position: relative;
+      display: grid;
+      gap: var(--match-gap, 24px);
+      padding-top: var(--round-offset, 0px);
+      min-width: 300px;
+    }
+
+    .round-col::after {
+      content: "";
+      position: absolute;
+      top: 58px;
+      right: -14px;
+      bottom: 26px;
+      width: 2px;
+      background: linear-gradient(180deg, transparent, rgba(201,168,76,.3), transparent);
+    }
+
+    .round-col:last-child::after,
+    .round-col.champion-col::after { display: none; }
+
+    .round-title { width: fit-content; margin-bottom: 2px; }
+    .round-subtitle { font-size: 12px; margin-top: -4px; }
+
+    .match-card {
+      position: relative;
+      padding: 14px;
+      border-radius: 20px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.015)),
+        linear-gradient(180deg, #171717, #101010);
+      border: 1px solid rgba(255,255,255,.08);
+      box-shadow: 0 12px 24px rgba(0,0,0,.24);
+    }
+
+    .match-card::before {
+      content: "";
+      position: absolute;
+      right: -15px;
+      top: 50%;
+      width: 15px;
+      height: 2px;
+      background: rgba(201,168,76,.55);
+      transform: translateY(-50%);
+    }
+
+    .round-col:last-child .match-card::before,
+    .champion-col .match-card::before { display: none; }
+
+    .match-topline,
+    .fighter-slot,
+    .champion-card,
+    .admin-shell,
+    .form-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .match-topline {
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .match-vs { font-size: 22px; line-height: .92; }
+
+    .fighter-slot {
+      grid-template-columns: 56px 1fr auto;
+      align-items: center;
+      gap: 12px;
+      padding: 10px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.06);
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+    }
+
+    .fighter-slot + .fighter-slot { margin-top: 10px; }
+
+    .fighter-slot.winner {
+      border-color: rgba(201,168,76,.55);
+      background: linear-gradient(90deg, rgba(201,168,76,.22), rgba(201,168,76,.04));
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.03);
+    }
+
+    .fighter-slot.pending {
+      opacity: .88;
+    }
+
+    .slot-photo {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      object-fit: cover;
+      background: #0f0f0f;
+      border: 1px solid rgba(255,255,255,.08);
+    }
+
+    .slot-name {
+      font-weight: 800;
+      font-size: 14px;
+      color: #f5efdc;
+    }
+
+    .slot-meta {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    .slot-seed,
+    .winner-chip {
+      justify-self: end;
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      font-weight: 800;
+      border: 1px solid rgba(255,255,255,.08);
+      color: #eadfbe;
+      background: rgba(255,255,255,.03);
+    }
+
+    .winner-chip {
+      color: #1b1407;
+      background: linear-gradient(180deg, var(--gold-2), var(--gold));
+      border-color: #8f722e;
+    }
+
+    .champion-col {
+      min-width: 320px;
+      align-self: center;
+      padding-top: 90px;
+    }
+
+    .champion-card {
+      align-content: start;
+      gap: 16px;
+      min-height: 260px;
+      padding: 20px;
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(201,168,76,.28), transparent 36%),
+        linear-gradient(180deg, #1b1710, #111111 55%, #0f0f0f 100%);
+      border: 1px solid rgba(201,168,76,.42);
+      box-shadow: 0 22px 42px rgba(0,0,0,.34);
+    }
+
+    .champion-card img {
+      width: 100%;
+      max-width: 180px;
+      aspect-ratio: 1 / 1.08;
+      object-fit: cover;
+      margin: 0 auto;
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,.1);
+    }
+
+    .champion-name {
+      font-size: 34px;
+      line-height: .92;
+      text-align: center;
+    }
+
+    .champion-copy {
+      text-align: center;
+      color: #d9cdab;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .empty-state {
+      padding: 22px;
+      border-radius: 18px;
+      border: 1px dashed rgba(255,255,255,.14);
+      background: rgba(255,255,255,.02);
+    }
+
+    .admin-shell {
+      grid-template-columns: 240px minmax(0, 1fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .admin-menu { display: grid; gap: 10px; }
+
+    .admin-panel h3 {
+      margin-bottom: 12px;
+      font-size: 24px;
+      font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    form { display: grid; gap: 12px; margin-bottom: 16px; }
+
+    .form-grid {
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+
+    input,
+    select {
+      width: 100%;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 14px;
+      padding: 13px 14px;
+      background: #0d0d0d;
+      color: var(--text);
+      outline: none;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: rgba(201,168,76,.5);
+      box-shadow: 0 0 0 3px rgba(201,168,76,.12);
+    }
+
+    select[multiple] { min-height: 180px; }
+
+    .err { color: var(--danger); }
+    .ok { color: var(--success); }
+    .match { border-top: 1px dashed rgba(255,255,255,.08); padding-top: 14px; margin-top: 14px; }
+
+    footer {
+      padding: 32px 0 18px;
+      text-align: center;
+      color: #817864;
+    }
+
+    @media (max-width: 1100px) {
+      .hero-grid,
+      .admin-shell {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .wrap { padding: 18px; }
+      .hero { padding: 24px; }
+      .fighter-hero { grid-template-columns: 88px 1fr; }
+      .fighter-photo { width: 88px; height: 120px; }
+      .fighter-record { grid-template-columns: 1fr; }
+      .fighter-slot { grid-template-columns: 46px 1fr; }
+      .slot-seed,
+      .winner-chip { grid-column: 2; justify-self: start; }
+      .slot-photo { width: 46px; height: 46px; border-radius: 12px; }
+      .bracket-grid { grid-auto-columns: minmax(270px, 1fr); }
+      .round-col,
+      .champion-col { min-width: 270px; }
+    }
   </style>
 </head>
 <body>
@@ -263,44 +729,171 @@
       { key: 'Peso Pesado', min: 79.5, max: 130 }
     ];
 
-    const DEFAULT_STATE = {
-      ui: { activeTab: 'public', adminSection: 'fighters', isAdmin: false },
-      adminPass: 'boxing123',
-      fighters: [
-        { id: crypto.randomUUID(), name: 'Carlos Mendoza', city: 'Vigo', gym: 'La Vieja Escuela', category: 'Peso Welter', weight: 66.2, wins: 18, losses: 2, draws: 0, kos: 14, photo: 'https://placehold.co/240x300/1a1714/F8F2DF?text=Carlos+Mendoza' },
-        { id: crypto.randomUUID(), name: 'Danny Reyes', city: 'Madrid', gym: 'Puño Norte', category: 'Peso Ligero', weight: 60.4, wins: 16, losses: 1, draws: 1, kos: 9, photo: 'https://placehold.co/240x300/111018/F8F2DF?text=Danny+Reyes' },
-        { id: crypto.randomUUID(), name: 'Iván Cortés', city: 'Sevilla', gym: 'South Ring', category: 'Peso Medio', weight: 71.8, wins: 13, losses: 0, draws: 0, kos: 8, photo: 'https://placehold.co/240x300/15110d/F8F2DF?text=Ivan+Cortes' },
-        { id: crypto.randomUUID(), name: 'Leo Vargas', city: 'Bilbao', gym: 'Old School Gym', category: 'Peso Pluma', weight: 56.8, wins: 20, losses: 3, draws: 0, kos: 11, photo: 'https://placehold.co/240x300/10131a/F8F2DF?text=Leo+Vargas' }
-      ],
-      events: [
-        { id: crypto.randomUUID(), name: 'Night of Talents', date: '2026-05-12', venue: 'Madrid Arena', status: 'Programado' },
-        { id: crypto.randomUUID(), name: 'Golden Gloves', date: '2026-06-01', venue: 'Bilbao Coliseum', status: 'Abierto' }
-      ],
-      brackets: []
-    };
-
     const storageKey = 'boxing-talents-mvp1';
-    let state = loadState();
     let editRefs = { fighterId: null, eventId: null };
 
+    function uid() {
+      return crypto.randomUUID();
+    }
+
+    function createDefaultFighters() {
+      return [
+        { id: uid(), name: 'Carlos Mendoza', city: 'Vigo', gym: 'La Vieja Escuela', category: 'Peso Welter', weight: 66.2, wins: 18, losses: 2, draws: 0, kos: 14, photo: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=720&q=80' },
+        { id: uid(), name: 'Danny Reyes', city: 'Madrid', gym: 'Puño Norte', category: 'Peso Ligero', weight: 60.4, wins: 16, losses: 1, draws: 1, kos: 9, photo: 'https://images.unsplash.com/photo-1517430816045-df4b7de11d1d?auto=format&fit=crop&w=720&q=80' },
+        { id: uid(), name: 'Iván Cortés', city: 'Sevilla', gym: 'South Ring', category: 'Peso Medio', weight: 71.8, wins: 13, losses: 0, draws: 0, kos: 8, photo: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=720&q=80' },
+        { id: uid(), name: 'Leo Vargas', city: 'Bilbao', gym: 'Old School Gym', category: 'Peso Pluma', weight: 56.8, wins: 20, losses: 3, draws: 0, kos: 11, photo: 'https://images.unsplash.com/photo-1566753323558-f4e0952af115?auto=format&fit=crop&w=720&q=80' }
+      ];
+    }
+
+    function getRoundName(size, fallback = 'Ronda inicial') {
+      const labels = {
+        2: 'Final',
+        4: 'Semifinales',
+        8: 'Cuartos de final',
+        16: 'Octavos de final'
+      };
+      return labels[size] || fallback;
+    }
+
+    function buildBracketRounds(participants, firstRoundName) {
+      const rounds = [];
+      let currentParticipants = [...participants];
+      let roundSize = participants.length;
+
+      while (currentParticipants.length >= 2) {
+        const matches = [];
+        for (let i = 0; i < currentParticipants.length; i += 2) {
+          matches.push({
+            fighter1Id: currentParticipants[i] || null,
+            fighter2Id: currentParticipants[i + 1] || null,
+            winnerId: null,
+            method: 'Pendiente',
+            scheduled: null
+          });
+        }
+
+        rounds.push({
+          name: rounds.length === 0 ? firstRoundName : getRoundName(roundSize, `Ronda ${rounds.length + 1}`),
+          matches
+        });
+
+        currentParticipants = new Array(Math.floor(currentParticipants.length / 2)).fill(null);
+        roundSize = currentParticipants.length;
+      }
+
+      return rounds;
+    }
+
+    function createDemoBracket(fighters) {
+      const participants = fighters.slice(0, 4).map(f => f.id);
+      const rounds = buildBracketRounds(participants, 'Semifinales');
+
+      if (rounds[0]?.matches[0]) {
+        rounds[0].matches[0].winnerId = fighters[0].id;
+        rounds[0].matches[0].method = 'TKO · R2';
+        rounds[0].matches[0].scheduled = '21:00';
+      }
+      if (rounds[0]?.matches[1]) {
+        rounds[0].matches[1].winnerId = fighters[2].id;
+        rounds[0].matches[1].method = 'UD · 3-0';
+        rounds[0].matches[1].scheduled = '21:45';
+      }
+      if (rounds[1]?.matches[0]) {
+        rounds[1].matches[0].fighter1Id = fighters[0].id;
+        rounds[1].matches[0].fighter2Id = fighters[2].id;
+        rounds[1].matches[0].scheduled = '23:00';
+      }
+
+      return {
+        id: uid(),
+        name: 'Boxing Talents Grand Prix',
+        season: '2026',
+        venue: 'Madrid Fight Dome',
+        isActive: true,
+        rounds
+      };
+    }
+
+    function createDefaultState() {
+      const fighters = createDefaultFighters();
+      const events = [
+        { id: uid(), name: 'Night of Talents', date: '2026-05-12', venue: 'Madrid Arena', status: 'Programado' },
+        { id: uid(), name: 'Golden Gloves', date: '2026-06-01', venue: 'Bilbao Coliseum', status: 'Abierto' }
+      ];
+
+      return {
+        ui: { activeTab: 'public', adminSection: 'fighters', isAdmin: false },
+        adminPass: 'boxing123',
+        fighters,
+        events,
+        brackets: [createDemoBracket(fighters)]
+      };
+    }
+
+    function placeholderPhoto(name) {
+      return `https://placehold.co/320x380/141414/F8F2DF?text=${encodeURIComponent(name || 'Boxeador')}`;
+    }
+
+    function normalizeRounds(rounds) {
+      if (!Array.isArray(rounds) || rounds.length === 0) return [];
+      return rounds.map((round, roundIndex) => ({
+        name: round?.name || getRoundName(Math.pow(2, Math.max(rounds.length - roundIndex - 1, 0)), `Ronda ${roundIndex + 1}`),
+        matches: Array.isArray(round?.matches)
+          ? round.matches.map(match => ({
+              fighter1Id: match?.fighter1Id || null,
+              fighter2Id: match?.fighter2Id || null,
+              winnerId: match?.winnerId || null,
+              method: match?.method || 'Pendiente',
+              scheduled: match?.scheduled || null
+            }))
+          : []
+      }));
+    }
+
+    function enrichBracket(bracket, fallbackFighters) {
+      const participants = fallbackFighters.slice(0, Math.max(2, Math.min(8, fallbackFighters.length))).map(f => f.id);
+      const rounds = normalizeRounds(bracket?.rounds);
+      const safeRounds = rounds.length ? rounds : buildBracketRounds(participants, getRoundName(participants.length));
+      propagateBracketForward(safeRounds, 0);
+
+      return {
+        id: bracket?.id || uid(),
+        name: bracket?.name || 'Boxing Talents Grand Prix',
+        season: bracket?.season || '2026',
+        venue: bracket?.venue || 'Rockanbox Arena',
+        isActive: bracket?.isActive !== false,
+        rounds: safeRounds
+      };
+    }
+
     function loadState() {
+      const base = createDefaultState();
       try {
         const raw = localStorage.getItem(storageKey);
-        if (!raw) return structuredClone(DEFAULT_STATE);
+        if (!raw) return structuredClone(base);
         const parsed = JSON.parse(raw);
+        const fighters = (parsed.fighters?.length ? parsed.fighters : base.fighters).map(f => ({
+          ...f,
+          photo: f.photo || placeholderPhoto(f.name)
+        }));
+        const brackets = parsed.brackets?.length
+          ? parsed.brackets.map(b => enrichBracket(b, fighters))
+          : base.brackets.map(b => enrichBracket(b, fighters));
+
         return {
-          ...structuredClone(DEFAULT_STATE),
+          ...base,
           ...parsed,
-          fighters: (parsed.fighters || DEFAULT_STATE.fighters).map(f => ({
-            ...f,
-            photo: f.photo || `https://placehold.co/240x300/1a1714/F8F2DF?text=${encodeURIComponent(f.name || 'Boxeador')}`
-          })),
-          ui: { ...DEFAULT_STATE.ui, ...(parsed.ui || {}), isAdmin: false }
+          fighters,
+          events: parsed.events?.length ? parsed.events : base.events,
+          brackets,
+          ui: { ...base.ui, ...(parsed.ui || {}), isAdmin: false }
         };
       } catch {
-        return structuredClone(DEFAULT_STATE);
+        return structuredClone(base);
       }
     }
+
+    let state = loadState();
 
     function saveState() {
       localStorage.setItem(storageKey, JSON.stringify({ ...state, ui: { ...state.ui, isAdmin: false } }));
@@ -316,7 +909,13 @@
       return WEIGHT_CLASSES.map(c => `<option value="${c.key}" ${c.key === selected ? 'selected' : ''}>${c.key}</option>`).join('');
     }
 
-    function findWeightClass(key) { return WEIGHT_CLASSES.find(c => c.key === key); }
+    function findWeightClass(key) {
+      return WEIGHT_CLASSES.find(c => c.key === key);
+    }
+
+    function fighterById(id) {
+      return state.fighters.find(f => f.id === id) || null;
+    }
 
     function validateFighter(payload) {
       const required = ['name', 'city', 'gym', 'category'];
@@ -371,41 +970,119 @@
       return brackets.find(b => b.isActive) || null;
     }
 
-    function renderBracketGraphic(bracket) {
-      if (!bracket) return '<article class="card"><p>No hay un bracket activo en este momento.</p></article>';
+    function propagateBracketForward(rounds, fromRoundIndex = 0) {
+      for (let r = Math.max(1, fromRoundIndex + 1); r < rounds.length; r += 1) {
+        const previousRound = rounds[r - 1];
+        const currentRound = rounds[r];
+        currentRound.matches.forEach((match, matchIndex) => {
+          const prevMatchA = previousRound.matches[matchIndex * 2] || null;
+          const prevMatchB = previousRound.matches[matchIndex * 2 + 1] || null;
+          const nextFighter1Id = prevMatchA?.winnerId || null;
+          const nextFighter2Id = prevMatchB?.winnerId || null;
+          match.fighter1Id = nextFighter1Id;
+          match.fighter2Id = nextFighter2Id;
+          if (match.winnerId && match.winnerId !== nextFighter1Id && match.winnerId !== nextFighter2Id) {
+            match.winnerId = null;
+            match.method = 'Pendiente';
+          }
+        });
+      }
+    }
+
+    function updateBracketWinner(bracket, roundIndex, matchIndex, winnerId) {
+      const clone = structuredClone(bracket);
+      const match = clone.rounds?.[roundIndex]?.matches?.[matchIndex];
+      if (!match) return clone;
+      match.winnerId = winnerId;
+      match.method = roundIndex === clone.rounds.length - 1 ? 'Champion decided' : 'Ganador confirmado';
+      propagateBracketForward(clone.rounds, roundIndex);
+      return clone;
+    }
+
+    function getChampion(bracket) {
+      if (!bracket?.rounds?.length) return null;
+      const finalRound = bracket.rounds[bracket.rounds.length - 1];
+      const finalMatch = finalRound?.matches?.[0];
+      return finalMatch?.winnerId ? fighterById(finalMatch.winnerId) : null;
+    }
+
+    function renderFighterSlot(match, fighterId, slotLabel, isWinner) {
+      const fighter = fighterById(fighterId);
       return `
-        <article class="card">
-          <strong>${bracket.name}</strong>
+        <div class="fighter-slot ${isWinner ? 'winner' : 'pending'}">
+          <img class="slot-photo" src="${fighter?.photo || placeholderPhoto(fighter?.name || slotLabel)}" alt="${fighter?.name || slotLabel}" loading="lazy" />
+          <div>
+            <div class="slot-name">${fighter?.name || 'Pendiente'}</div>
+            <div class="slot-meta">${fighter ? `${fighter.city} · ${fighter.category}` : 'Por definir'}</div>
+          </div>
+          <span class="${isWinner ? 'winner-chip' : 'slot-seed'}">${isWinner ? 'Winner' : slotLabel}</span>
+        </div>
+      `;
+    }
+
+    function renderBracketGraphic(bracket) {
+      if (!bracket) {
+        return '<article class="card bracket-shell"><div class="empty-state">No hay un bracket activo en este momento.</div></article>';
+      }
+
+      const champion = getChampion(bracket);
+
+      return `
+        <article class="card bracket-shell">
+          <div class="bracket-meta">
+            <div>
+              <div class="eyebrow">Rockanbox inspired bracket</div>
+              <div class="bracket-name">${bracket.name}</div>
+              <p class="bracket-subcopy">Diseño visual de torneo con look editorial: cartelería oscura, contraste dorado y tarjetas de combate estilo liga premium.</p>
+            </div>
+            <div class="brand-row">
+              <span class="belt-mark">Season ${bracket.season || '2026'}</span>
+              <span class="brand-pill">${bracket.venue || 'Fight Dome'}</span>
+              <span class="brand-pill">Bracket gráfico</span>
+            </div>
+          </div>
           <div class="bracket-graphic">
             <div class="bracket-grid">
-              ${bracket.rounds.map((r, ri) => `
-                <section class="round-col" style="margin-top:${ri * 18}px; gap:${12 + (ri * 14)}px;">
-                  <p><span class="round-title">${r.name}</span></p>
-                  ${r.matches.map((m, mi) => {
-                    const f1 = state.fighters.find(f => f.id === m.fighter1Id)?.name || 'Pendiente';
-                    const f2 = state.fighters.find(f => f.id === m.fighter2Id)?.name || 'Pendiente';
-                    const isF1Winner = m.winnerId && m.winnerId === m.fighter1Id;
-                    const isF2Winner = m.winnerId && m.winnerId === m.fighter2Id;
+              ${bracket.rounds.map((round, roundIndex) => `
+                <section class="round-col" style="--round-offset:${roundIndex * 54}px; --match-gap:${24 + roundIndex * 46}px;">
+                  <div>
+                    <span class="round-title">${round.name}</span>
+                    <p class="round-subtitle">${round.matches.length} combate${round.matches.length !== 1 ? 's' : ''}</p>
+                  </div>
+                  ${round.matches.map((match, matchIndex) => {
+                    const fighter1 = fighterById(match.fighter1Id);
+                    const fighter2 = fighterById(match.fighter2Id);
+                    const matchTitle = fighter1 && fighter2 ? `${fighter1.name.split(' ')[0]} vs ${fighter2.name.split(' ')[0]}` : `Fight ${matchIndex + 1}`;
                     return `
-                      <article class="bracket-match">
-                        <div class="fighter-slot ${isF1Winner ? 'winner' : 'pending'}">
-                          <span>${f1}</span><span class="seed">M${mi + 1}</span>
+                      <article class="match-card">
+                        <div class="match-topline">
+                          <div class="match-vs">${matchTitle}</div>
+                          <span class="status-chip">${match.method || 'Pendiente'}</span>
                         </div>
-                        <div class="fighter-slot ${isF2Winner ? 'winner' : 'pending'}">
-                          <span>${f2}</span><span class="seed">M${mi + 1}</span>
-                        </div>
+                        ${renderFighterSlot(match, match.fighter1Id, 'A', match.winnerId && match.winnerId === match.fighter1Id)}
+                        ${renderFighterSlot(match, match.fighter2Id, 'B', match.winnerId && match.winnerId === match.fighter2Id)}
+                        <p class="match-note">${match.scheduled ? `Horario estimado · ${match.scheduled}` : 'Esperando resultado para avanzar al siguiente cuadro.'}</p>
                       </article>
                     `;
                   }).join('')}
                 </section>
               `).join('')}
+              <section class="round-col champion-col">
+                <div>
+                  <span class="round-title">Champion</span>
+                  <p class="round-subtitle">Cinturón Boxing Talents</p>
+                </div>
+                <article class="champion-card">
+                  <img src="${champion?.photo || placeholderPhoto(champion?.name || 'Champion')}" alt="${champion?.name || 'Champion'}" loading="lazy" />
+                  <div class="champion-name">${champion ? champion.name : '<span>Pending</span> Winner'}</div>
+                  <p class="champion-copy">${champion ? `${champion.city} · ${champion.category} · ${champion.wins}-${champion.losses}-${champion.draws}` : 'La tarjeta final queda lista para coronar al campeón cuando se cierre la última pelea.'}</p>
+                  <div class="brand-row">
+                    <span class="belt-mark">Fight Night</span>
+                    <span class="brand-pill">Premium bracket</span>
+                  </div>
+                </article>
+              </section>
             </div>
-          </div>
-          <p class="bracket-legend">Bracket visual con líneas de avance por ronda. Los ganadores quedan resaltados en dorado.</p>
-          <div class="brand-strip">
-            <span class="brand-pill">Custom Fighter</span>
-            <span class="brand-pill">Rock & Box</span>
-            <span class="brand-pill">Fight Night</span>
           </div>
         </article>
       `;
@@ -414,68 +1091,130 @@
     function publicView() {
       const upcomingEvents = getUpcomingEvents(state.events);
       const activeBracket = getActiveBracket(state.brackets);
+      const champion = getChampion(activeBracket);
+
       return `
         <section class="hero">
-          <p class="label">Liga oficial · MVP1</p>
-          <h1>BOXING <span>TALENTS</span></h1>
-          <div class="belt-mark">Rock & Box · Boxing Talents</div>
-          <p>Cartelera con estética fight-poster, cinturón dorado y modo campeonato.</p>
-          <div class="cta-group">
-            <a class="cta" href="#fighters">Boxeadores destacados</a>
-            <a class="cta secondary" href="#events">Próximos eventos</a>
-            <a class="cta secondary" href="#bracket">Bracket actual</a>
+          <div class="hero-grid">
+            <div class="hero-copy">
+              <div class="eyebrow">Combat sports landing · editorial dark mode</div>
+              <h2 class="hero-title">BOXING <span>TALENTS</span></h2>
+              <p class="hero-description">Rediseño inspirado en la estética reciente de Rockanbox: contraste oscuro, dorado premium, cartelería de evento y un bracket visual más cercano a una liga profesional.</p>
+              <div class="hero-actions">
+                <a class="cta" href="#bracket">Ver bracket gráfico</a>
+                <a class="cta secondary" href="#fighters">Roster</a>
+                <a class="cta secondary" href="#events">Eventos</a>
+              </div>
+              <div class="brand-row" style="margin-top:18px;">
+                <span class="belt-mark">Rock &amp; Box feel</span>
+                <span class="brand-pill">Boxing Talents</span>
+                <span class="brand-pill">Live bracket</span>
+              </div>
+            </div>
+            <div class="hero-side">
+              <article class="hero-poster">
+                <div class="poster-kicker">Main event visual</div>
+                <div class="poster-title">Talent <span style="color:var(--gold-2);">Bracket</span></div>
+                <p class="poster-subtitle">Un lenguaje visual más premium y contundente, con bloques tipo cartel y jerarquía clara.</p>
+              </article>
+              <article class="promo-card">
+                <div class="eyebrow">Current spotlight</div>
+                <strong>${champion ? champion.name : activeBracket?.name || 'Championship mode'}</strong>
+                <p>${champion ? `Camino al cinturón abierto para ${champion.category}.` : 'Final pendiente con visual de campeonato, listo para usarse como home principal de la liga.'}</p>
+              </article>
+            </div>
           </div>
         </section>
 
         <section class="stats">
-          <div class="card"><div class="num">${state.fighters.length}</div><div class="label">Boxeadores</div></div>
-          <div class="card"><div class="num">${state.events.length}</div><div class="label">Eventos</div></div>
-          <div class="card"><div class="num">${activeBracket ? 1 : 0}</div><div class="label">Bracket activo</div></div>
+          <article class="card stat-card">
+            <div class="label">Boxeadores en roster</div>
+            <div class="stat-number">${state.fighters.length}</div>
+            <p class="stat-copy">Perfiles con foto, récord y señales visuales más editoriales.</p>
+          </article>
+          <article class="card stat-card">
+            <div class="label">Eventos próximos</div>
+            <div class="stat-number">${upcomingEvents.length}</div>
+            <p class="stat-copy">Calendario listo para presentar veladas y open calls.</p>
+          </article>
+          <article class="card stat-card">
+            <div class="label">Brackets activos</div>
+            <div class="stat-number">${activeBracket ? 1 : 0}</div>
+            <p class="stat-copy">Vista torneo con progresión visual entre rondas.</p>
+          </article>
         </section>
 
-        <section id="fighters">
-          <h2 class="section-title">Boxeadores destacados</h2>
-          <div class="grid">
+        <section id="fighters" class="section">
+          <div class="section-head">
+            <div>
+              <div class="eyebrow">Roster</div>
+              <h2 class="section-title">Featured <span>fighters</span></h2>
+            </div>
+            <p class="section-copy">Las fichas ahora respiran más como una pieza de marca: foto dominante, microdatos claros y métricas bien jerarquizadas.</p>
+          </div>
+          <div class="grid fighters-grid">
             ${state.fighters.map(f => `
-              <article class="card fighter">
-                <div class="fighter-profile">
+              <article class="card fighter-card">
+                <div class="fighter-hero">
                   <img class="fighter-photo" src="${f.photo}" alt="Foto de ${f.name}" loading="lazy" />
-                  <div class="fighter-meta">
-                    <div class="tag">${f.category}</div>
-                    <h3>${f.name}</h3>
-                    <p>${f.city} · ${f.gym}</p>
-                    <div class="record">${f.wins}-${f.losses}-${f.draws} · ${f.kos} KO · ${f.weight}kg</div>
+                  <div>
                     <div class="fighter-badges">
-                      <span class="fighter-badge">Récord ${f.wins}-${f.losses}-${f.draws}</span>
-                      <span class="fighter-badge">${f.kos} KO</span>
+                      <span class="fighter-badge fighter-badge--gold">${f.category}</span>
+                      <span class="fighter-badge">${f.weight} kg</span>
                     </div>
+                    <h3 class="fighter-name">${f.name}</h3>
+                    <p class="fighter-meta">${f.city} · ${f.gym}</p>
+                    <p class="record">${f.kos} KO · ${f.wins}-${f.losses}-${f.draws}</p>
                   </div>
                 </div>
-              </article>`).join('')}
+                <div class="fighter-record">
+                  <div class="fighter-stat"><strong>${f.wins}</strong><span>Victorias</span></div>
+                  <div class="fighter-stat"><strong>${f.kos}</strong><span>KO</span></div>
+                  <div class="fighter-stat"><strong>${f.losses}</strong><span>Derrotas</span></div>
+                </div>
+              </article>
+            `).join('')}
           </div>
         </section>
 
-        <section id="events">
-          <h2 class="section-title">Próximos eventos</h2>
+        <section id="events" class="section">
+          <div class="section-head">
+            <div>
+              <div class="eyebrow">Calendar</div>
+              <h2 class="section-title">Upcoming <span>events</span></h2>
+            </div>
+            <p class="section-copy">Bloques de evento más potentes visualmente para comunicar sede, fecha y estado de forma limpia.</p>
+          </div>
           ${upcomingEvents.length ? `
-            <div class="list">
+            <div class="grid events-grid">
               ${upcomingEvents.map(e => `
-                <article class="card">
-                  <strong>${e.name}</strong>
-                  <p>${e.date} · ${e.venue}</p>
-                  <p class="tag">${e.status}</p>
+                <article class="card event-card">
+                  <div class="event-line">
+                    <span class="event-badge">${e.status}</span>
+                    <span class="micro-copy">${e.date}</span>
+                  </div>
+                  <h3 class="event-name">${e.name}</h3>
+                  <p class="event-meta">${e.venue}</p>
+                  <div class="brand-row">
+                    <span class="brand-pill">Fight Night</span>
+                    <span class="brand-pill">Tickets soon</span>
+                  </div>
                 </article>
               `).join('')}
             </div>
           ` : `
-            <article class="card">
-              <p>No hay eventos futuros programados.</p>
-            </article>
+            <article class="card"><p class="empty-state">No hay eventos futuros programados.</p></article>
           `}
         </section>
 
-        <section id="bracket">
-          <h2 class="section-title">Bracket actual de la liga</h2>
+        <section id="bracket" class="section">
+          <div class="section-head">
+            <div>
+              <div class="eyebrow">Tournament view</div>
+              <h2 class="section-title">Graphic <span>bracket</span></h2>
+            </div>
+            <p class="section-copy">Rehecho para que parezca una liga real: columnas por ronda, tarjetas de combate, avance visual y tarjeta final de campeón.</p>
+          </div>
           ${renderBracketGraphic(activeBracket)}
         </section>
       `;
@@ -483,143 +1222,146 @@
 
     function adminLoginView() {
       return `
-      <section class="card">
-        <h2 class="section-title">Admin (protegido)</h2>
-        <p>Introduce la clave local para habilitar el modo admin.</p>
-        <form id="admin-login-form">
-          <input type="password" name="password" placeholder="Clave admin" required />
-          <button type="submit">Entrar al admin</button>
-        </form>
-        <div id="admin-login-msg" class="err"></div>
-      </section>`;
+        <section class="card">
+          <h2 class="section-title">Admin <span>mode</span></h2>
+          <p class="section-copy">Introduce la clave local para habilitar el modo admin.</p>
+          <form id="admin-login-form">
+            <input type="password" name="password" placeholder="Clave admin" required />
+            <button type="submit">Entrar al admin</button>
+          </form>
+          <div id="admin-login-msg" class="err"></div>
+        </section>`;
     }
 
     function fightersModule() {
       const editing = state.fighters.find(f => f.id === editRefs.fighterId);
       return `
-      <section class="admin-panel card">
-        <h3>Gestión de boxeadores</h3>
-        <form id="fighter-form">
-          <div class="form-grid">
-            <input name="name" placeholder="Nombre" required value="${editing?.name || ''}" />
-            <input name="photo" type="url" placeholder="URL de foto (tipo BoxRec)" required value="${editing?.photo || ''}" />
-            <input name="city" placeholder="Ciudad" required value="${editing?.city || ''}" />
-            <input name="gym" placeholder="Gimnasio" required value="${editing?.gym || ''}" />
-            <select name="category" required>${categoryOptions(editing?.category || 'Peso Ligero')}</select>
-            <input type="number" step="0.1" name="weight" placeholder="Peso (kg)" required value="${editing?.weight ?? ''}" />
-            <input type="number" name="wins" min="0" placeholder="Victorias" required value="${editing?.wins ?? 0}" />
-            <input type="number" name="losses" min="0" placeholder="Derrotas" required value="${editing?.losses ?? 0}" />
-            <input type="number" name="draws" min="0" placeholder="Nulos" required value="${editing?.draws ?? 0}" />
-            <input type="number" name="kos" min="0" placeholder="KO" required value="${editing?.kos ?? 0}" />
-          </div>
-          <button type="submit">${editing ? 'Guardar cambios' : 'Crear boxeador'}</button>
-          ${editing ? '<button type="button" class="secondary" id="cancel-fighter-edit">Cancelar edición</button>' : ''}
-        </form>
-        <div id="fighter-msg"></div>
-        <div class="list">
-          ${state.fighters.map(f => `
-            <article class="card">
-              <div class="fighter-profile">
-                <img class="fighter-photo" src="${f.photo}" alt="Foto de ${f.name}" loading="lazy" />
-                <div class="fighter-meta">
-                  <div class="tag">${f.category}</div>
-                  <strong>${f.name}</strong>
-                  <p>${f.city} · ${f.gym} · ${f.weight}kg</p>
-                  <p class="record">${f.wins}-${f.losses}-${f.draws} · ${f.kos} KO</p>
+        <section class="admin-panel card">
+          <h3>Gestión de boxeadores</h3>
+          <form id="fighter-form">
+            <div class="form-grid">
+              <input name="name" placeholder="Nombre" required value="${editing?.name || ''}" />
+              <input name="photo" type="url" placeholder="URL de foto" required value="${editing?.photo || ''}" />
+              <input name="city" placeholder="Ciudad" required value="${editing?.city || ''}" />
+              <input name="gym" placeholder="Gimnasio" required value="${editing?.gym || ''}" />
+              <select name="category" required>${categoryOptions(editing?.category || 'Peso Ligero')}</select>
+              <input type="number" step="0.1" name="weight" placeholder="Peso (kg)" required value="${editing?.weight ?? ''}" />
+              <input type="number" name="wins" min="0" placeholder="Victorias" required value="${editing?.wins ?? 0}" />
+              <input type="number" name="losses" min="0" placeholder="Derrotas" required value="${editing?.losses ?? 0}" />
+              <input type="number" name="draws" min="0" placeholder="Nulos" required value="${editing?.draws ?? 0}" />
+              <input type="number" name="kos" min="0" placeholder="KO" required value="${editing?.kos ?? 0}" />
+            </div>
+            <button type="submit">${editing ? 'Guardar cambios' : 'Crear boxeador'}</button>
+            ${editing ? '<button type="button" class="secondary" id="cancel-fighter-edit">Cancelar edición</button>' : ''}
+          </form>
+          <div id="fighter-msg"></div>
+          <div class="list">
+            ${state.fighters.map(f => `
+              <article class="card">
+                <div class="fighter-hero">
+                  <img class="fighter-photo" src="${f.photo}" alt="Foto de ${f.name}" loading="lazy" />
+                  <div>
+                    <div class="fighter-badges">
+                      <span class="fighter-badge fighter-badge--gold">${f.category}</span>
+                    </div>
+                    <strong>${f.name}</strong>
+                    <p class="fighter-meta">${f.city} · ${f.gym} · ${f.weight}kg</p>
+                    <p class="record">${f.wins}-${f.losses}-${f.draws} · ${f.kos} KO</p>
+                  </div>
                 </div>
-              </div>
-              <div class="item-actions">
-                <button data-action="edit-fighter" data-id="${f.id}" class="secondary">Editar</button>
-                <button data-action="delete-fighter" data-id="${f.id}">Eliminar</button>
-              </div>
-            </article>`).join('')}
-        </div>
-      </section>`;
+                <div class="item-actions">
+                  <button data-action="edit-fighter" data-id="${f.id}" class="secondary">Editar</button>
+                  <button data-action="delete-fighter" data-id="${f.id}">Eliminar</button>
+                </div>
+              </article>`).join('')}
+          </div>
+        </section>`;
     }
 
     function eventsModule() {
       const editing = state.events.find(e => e.id === editRefs.eventId);
       return `
-      <section class="admin-panel card">
-        <h3>Gestión de eventos</h3>
-        <form id="event-form">
-          <div class="form-grid">
-            <input name="name" required placeholder="Nombre evento" value="${editing?.name || ''}" />
-            <input type="date" name="date" required value="${editing?.date || ''}" />
-            <input name="venue" required placeholder="Sede" value="${editing?.venue || ''}" />
-            <select name="status" required>
-              ${['Borrador','Programado','Abierto','Cerrado'].map(s => `<option value="${s}" ${editing?.status===s?'selected':''}>${s}</option>`).join('')}
-            </select>
+        <section class="admin-panel card">
+          <h3>Gestión de eventos</h3>
+          <form id="event-form">
+            <div class="form-grid">
+              <input name="name" required placeholder="Nombre evento" value="${editing?.name || ''}" />
+              <input type="date" name="date" required value="${editing?.date || ''}" />
+              <input name="venue" required placeholder="Sede" value="${editing?.venue || ''}" />
+              <select name="status" required>
+                ${['Borrador', 'Programado', 'Abierto', 'Cerrado'].map(s => `<option value="${s}" ${editing?.status===s?'selected':''}>${s}</option>`).join('')}
+              </select>
+            </div>
+            <button type="submit">${editing ? 'Guardar cambios' : 'Crear evento'}</button>
+            ${editing ? '<button type="button" class="secondary" id="cancel-event-edit">Cancelar edición</button>' : ''}
+          </form>
+          <div id="event-msg"></div>
+          <div class="list">
+            ${state.events.map(e => `
+              <article class="card">
+                <strong>${e.name}</strong>
+                <p class="event-meta">${e.date} · ${e.venue}</p>
+                <p><span class="event-badge">${e.status}</span></p>
+                <div class="item-actions">
+                  <button data-action="edit-event" data-id="${e.id}" class="secondary">Editar</button>
+                  <button data-action="delete-event" data-id="${e.id}">Eliminar</button>
+                </div>
+              </article>`).join('')}
           </div>
-          <button type="submit">${editing ? 'Guardar cambios' : 'Crear evento'}</button>
-          ${editing ? '<button type="button" class="secondary" id="cancel-event-edit">Cancelar edición</button>' : ''}
-        </form>
-        <div id="event-msg"></div>
-        <div class="list">
-          ${state.events.map(e => `
-            <article class="card">
-              <strong>${e.name}</strong>
-              <p>${e.date} · ${e.venue}</p>
-              <p class="tag">${e.status}</p>
-              <div class="item-actions">
-                <button data-action="edit-event" data-id="${e.id}" class="secondary">Editar</button>
-                <button data-action="delete-event" data-id="${e.id}">Eliminar</button>
-              </div>
-            </article>`).join('')}
-        </div>
-      </section>`;
+        </section>`;
     }
 
     function bracketsModule() {
       return `
-      <section class="admin-panel card">
-        <h3>Gestión de brackets</h3>
-        <form id="bracket-form">
-          <div class="form-grid">
-            <input name="name" required placeholder="Nombre bracket" />
-            <input name="roundName" required placeholder="Nombre ronda inicial (ej: Cuartos)" />
-            <select multiple name="participants" size="6" required>
-              ${state.fighters.map(f => `<option value="${f.id}">${f.name} — ${f.category}</option>`).join('')}
-            </select>
+        <section class="admin-panel card">
+          <h3>Gestión de brackets</h3>
+          <p class="form-help">Ahora los brackets se crean con todas las rondas preparadas y los ganadores avanzan automáticamente.</p>
+          <form id="bracket-form">
+            <div class="form-grid">
+              <input name="name" required placeholder="Nombre bracket" />
+              <input name="roundName" required placeholder="Nombre ronda inicial (ej: Cuartos)" />
+              <select multiple name="participants" size="6" required>
+                ${state.fighters.map(f => `<option value="${f.id}">${f.name} — ${f.category}</option>`).join('')}
+              </select>
+            </div>
+            <button type="submit">Crear bracket</button>
+          </form>
+          <div id="bracket-msg"></div>
+          <div class="list">
+            ${state.brackets.map(b => `
+              <article class="card">
+                <strong>${b.name}</strong>
+                <p class="record">${b.isActive ? 'Bracket activo' : 'Bracket inactivo'} · ${b.venue || 'Sin venue'}</p>
+                <div class="item-actions">
+                  <button data-action="set-active-bracket" data-id="${b.id}" class="secondary">Marcar como activo</button>
+                </div>
+                ${b.rounds.map((r, ri) => `
+                  <div class="match">
+                    <p><span class="round-title">${r.name}</span></p>
+                    ${r.matches.map((m, mi) => {
+                      const f1 = fighterById(m.fighter1Id)?.name || 'Pendiente';
+                      const f2 = fighterById(m.fighter2Id)?.name || 'Pendiente';
+                      const winnerName = fighterById(m.winnerId)?.name || 'Sin definir';
+                      return `<div class="card">
+                        <p><strong>${f1}</strong> vs <strong>${f2}</strong></p>
+                        <p class="record">Ganador: ${winnerName}</p>
+                        <div class="item-actions">
+                          ${m.fighter1Id ? `<button data-action="pick-winner" data-bid="${b.id}" data-ri="${ri}" data-mi="${mi}" data-wid="${m.fighter1Id}" class="secondary">Gana ${f1}</button>` : ''}
+                          ${m.fighter2Id ? `<button data-action="pick-winner" data-bid="${b.id}" data-ri="${ri}" data-mi="${mi}" data-wid="${m.fighter2Id}" class="secondary">Gana ${f2}</button>` : ''}
+                        </div>
+                      </div>`;
+                    }).join('')}
+                  </div>`).join('')}
+              </article>`).join('')}
           </div>
-          <button type="submit">Crear bracket y ronda</button>
-        </form>
-        <div id="bracket-msg"></div>
-        <div class="list">
-          ${state.brackets.map(b => `
-            <article class="card">
-              <strong>${b.name}</strong>
-              <p class="record">${b.isActive ? 'Bracket activo' : 'Bracket inactivo'}</p>
-              <div class="item-actions">
-                <button data-action="set-active-bracket" data-id="${b.id}" class="secondary">Marcar como activo</button>
-              </div>
-              ${b.rounds.map((r, ri) => `
-                <div class="match">
-                  <p><span class="tag">${r.name}</span></p>
-                  ${r.matches.map((m, mi) => {
-                    const f1 = state.fighters.find(f => f.id === m.fighter1Id)?.name || 'N/D';
-                    const f2 = state.fighters.find(f => f.id === m.fighter2Id)?.name || 'N/D';
-                    const winnerName = state.fighters.find(f => f.id === m.winnerId)?.name;
-                    return `<div class="card">
-                      <p>${f1} vs ${f2}</p>
-                      <p class="record">Ganador: ${winnerName || 'Sin definir'}</p>
-                      <div class="item-actions">
-                        <button data-action="pick-winner" data-bid="${b.id}" data-ri="${ri}" data-mi="${mi}" data-wid="${m.fighter1Id}" class="secondary">Gana ${f1}</button>
-                        <button data-action="pick-winner" data-bid="${b.id}" data-ri="${ri}" data-mi="${mi}" data-wid="${m.fighter2Id}" class="secondary">Gana ${f2}</button>
-                      </div>
-                    </div>`;
-                  }).join('')}
-                </div>`).join('')}
-            </article>`).join('')}
-        </div>
-      </section>`;
+        </section>`;
     }
 
     function adminView() {
       if (!state.ui.isAdmin) return adminLoginView();
       return `
         <section class="admin-shell">
-          <aside class="admin-menu card">
+          <aside class="card admin-menu">
             <button class="${state.ui.adminSection==='fighters'?'':'secondary'}" data-action="set-admin-section" data-section="fighters">Boxeadores</button>
             <button class="${state.ui.adminSection==='events'?'':'secondary'}" data-action="set-admin-section" data-section="events">Eventos</button>
             <button class="${state.ui.adminSection==='brackets'?'':'secondary'}" data-action="set-admin-section" data-section="brackets">Brackets</button>
@@ -639,8 +1381,8 @@
       app.innerHTML = `
         <div class="topbar">
           <div>
-            <p class="label">Estado persistente localStorage</p>
-            <h1>BOXING <span>TALENTS</span></h1>
+            <p class="label">Rockanbox-inspired redesign</p>
+            <h1 class="page-title">Boxing <span>Talents</span></h1>
           </div>
           <div class="tabs">
             <button class="tab ${state.ui.activeTab === 'public' ? 'active' : 'secondary'}" data-action="set-tab" data-tab="public">Público</button>
@@ -648,7 +1390,7 @@
           </div>
         </div>
         ${state.ui.activeTab === 'public' ? publicView() : adminView()}
-        <footer>MVP1 con estado, CRUD y persistencia local.</footer>
+        <footer>Boxing Talents · Rediseño visual con bracket gráfico y estética editorial premium.</footer>
       `;
       bindEvents();
     }
@@ -696,9 +1438,13 @@
           setState(s => {
             const fighters = editRefs.fighterId
               ? s.fighters.map(f => f.id === editRefs.fighterId ? { ...f, ...payload } : f)
-              : [...s.fighters, { id: crypto.randomUUID(), ...payload }];
+              : [...s.fighters, { id: uid(), ...payload }];
             editRefs.fighterId = null;
-            return { ...s, fighters };
+            return {
+              ...s,
+              fighters,
+              brackets: s.brackets.map(b => enrichBracket(b, fighters))
+            };
           });
         };
       }
@@ -712,7 +1458,14 @@
       });
 
       document.querySelectorAll('[data-action="delete-fighter"]').forEach(btn => btn.onclick = () => {
-        setState(s => ({ ...s, fighters: s.fighters.filter(f => f.id !== btn.dataset.id) }));
+        setState(s => {
+          const fighters = s.fighters.filter(f => f.id !== btn.dataset.id);
+          return {
+            ...s,
+            fighters,
+            brackets: s.brackets.map(b => enrichBracket(b, fighters))
+          };
+        });
       });
 
       const eventForm = document.getElementById('event-form');
@@ -727,7 +1480,7 @@
           setState(s => {
             const events = editRefs.eventId
               ? s.events.map(ev => ev.id === editRefs.eventId ? { ...ev, ...payload } : ev)
-              : [...s.events, { id: crypto.randomUUID(), ...payload }];
+              : [...s.events, { id: uid(), ...payload }];
             editRefs.eventId = null;
             return { ...s, events };
           });
@@ -759,14 +1512,17 @@
           const roundErr = validateRoundSize(participants);
           if (roundErr) { msg.className = 'err'; msg.textContent = roundErr; return; }
 
-          const matches = [];
-          for (let i = 0; i < participants.length; i += 2) {
-            matches.push({ fighter1Id: participants[i], fighter2Id: participants[i + 1], winnerId: null });
-          }
-
+          const rounds = buildBracketRounds(participants, roundName);
           setState(s => ({
             ...s,
-            brackets: [...s.brackets, { id: crypto.randomUUID(), name, rounds: [{ name: roundName, matches }], isActive: s.brackets.length === 0 }]
+            brackets: [...s.brackets.map(b => ({ ...b, isActive: false })), {
+              id: uid(),
+              name,
+              season: new Date().getFullYear().toString(),
+              venue: 'Venue por definir',
+              rounds,
+              isActive: true
+            }]
           }));
         };
       }
@@ -785,16 +1541,7 @@
           ...s,
           brackets: s.brackets.map(b => {
             if (b.id !== bid) return b;
-            return {
-              ...b,
-              rounds: b.rounds.map((r, rIndex) => {
-                if (rIndex !== Number(ri)) return r;
-                return {
-                  ...r,
-                  matches: r.matches.map((m, mIndex) => mIndex === Number(mi) ? { ...m, winnerId: wid } : m)
-                };
-              })
-            };
+            return updateBracketWinner(b, Number(ri), Number(mi), wid);
           })
         }));
       });
