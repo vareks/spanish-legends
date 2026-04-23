@@ -3,24 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Boxing Talents — Rockanbox Edition</title>
+  <title>Spanish Legends — Boxing Talents Fight Night</title>
   <style>
     :root {
-      --gold: #c9a84c;
-      --gold-2: #f6d878;
-      --gold-soft: rgba(201, 168, 76, 0.18);
-      --red: #b5142f;
-      --red-soft: rgba(181, 20, 47, 0.18);
-      --ink: #090909;
-      --panel: #121212;
-      --panel-2: #171717;
-      --panel-3: #1f1f1f;
-      --line: rgba(255,255,255,.08);
-      --text: #f4efe2;
-      --muted: #b7ad92;
+      --gold: #c79a18;
+      --gold-2: #f7df82;
+      --gold-soft: rgba(199, 154, 24, 0.2);
+      --red: #d41111;
+      --red-soft: rgba(212, 17, 17, 0.22);
+      --ink: #050505;
+      --panel: #101010;
+      --panel-2: #151515;
+      --panel-3: #1a1a1a;
+      --line: rgba(255,255,255,.1);
+      --text: #f8f2e6;
+      --muted: #c8bca0;
       --success: #55b578;
       --danger: #ff7c7c;
-      --shadow: 0 24px 50px rgba(0,0,0,.38);
+      --shadow: 0 26px 58px rgba(0,0,0,.42);
       --radius: 22px;
     }
 
@@ -33,9 +33,9 @@
       min-height: 100vh;
       color: var(--text);
       background:
-        radial-gradient(circle at 12% 12%, rgba(201, 168, 76, .12), transparent 22%),
-        radial-gradient(circle at 88% 10%, rgba(181, 20, 47, .16), transparent 28%),
-        linear-gradient(180deg, #050505, #0c0c0c 40%, #080808 100%);
+        radial-gradient(circle at 12% 12%, rgba(212, 17, 17, .16), transparent 20%),
+        radial-gradient(circle at 88% 8%, rgba(199, 154, 24, .16), transparent 24%),
+        linear-gradient(180deg, #050505, #101010 44%, #070707 100%);
       letter-spacing: .1px;
     }
 
@@ -170,17 +170,17 @@
       border-radius: calc(var(--radius) + 8px);
       overflow: hidden;
       background:
-        linear-gradient(135deg, rgba(255,255,255,.06), transparent 30%),
-        radial-gradient(circle at 80% 20%, rgba(181,20,47,.18), transparent 24%),
-        radial-gradient(circle at 15% 30%, rgba(201,168,76,.16), transparent 22%),
-        linear-gradient(145deg, #101010 0%, #0d0d0d 50%, #151515 100%);
+        linear-gradient(135deg, rgba(255,255,255,.05), transparent 30%),
+        linear-gradient(180deg, rgba(212,17,17,.22), rgba(212,17,17,0) 28%),
+        radial-gradient(circle at 82% 16%, rgba(199,154,24,.22), transparent 24%),
+        linear-gradient(145deg, #171717 0%, #0d0d0d 46%, #141414 100%);
       border: 1px solid rgba(255,255,255,.08);
       box-shadow: var(--shadow);
       margin-bottom: 24px;
     }
 
     .hero::after {
-      content: "FIGHT NIGHT";
+      content: "SEMIFINALES";
       position: absolute;
       right: -18px;
       bottom: -18px;
@@ -211,9 +211,10 @@
     .hero-copy { max-width: 720px; }
 
     .hero-title {
-      font-size: clamp(50px, 9vw, 100px);
-      line-height: .88;
+      font-size: clamp(54px, 9vw, 112px);
+      line-height: .82;
       margin: 10px 0 12px;
+      text-shadow: 0 4px 18px rgba(0,0,0,.38);
     }
 
     .hero-description {
@@ -249,8 +250,9 @@
     .hero-badge--gold,
     .fighter-badge--gold {
       color: #1c1407;
-      background: linear-gradient(180deg, var(--gold-2), var(--gold));
+      background: linear-gradient(180deg, #fff0a8, var(--gold-2) 35%, var(--gold));
       border-color: #8f722e;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.5), 0 8px 18px rgba(0,0,0,.22);
     }
 
     .hero-badge--dark,
@@ -286,11 +288,10 @@
       display: grid;
       align-content: end;
       background:
-        linear-gradient(180deg, rgba(0,0,0,.06), rgba(0,0,0,.6)),
+        linear-gradient(180deg, rgba(0,0,0,.12), rgba(0,0,0,.74)),
+        linear-gradient(90deg, rgba(212,17,17,.78) 0 22%, rgba(212,17,17,0) 22%),
         radial-gradient(circle at 50% 18%, rgba(255,255,255,.12), transparent 20%),
-        linear-gradient(160deg, rgba(181,20,47,.35), rgba(0,0,0,0) 42%),
-        linear-gradient(210deg, rgba(201,168,76,.3), rgba(0,0,0,0) 38%),
-        linear-gradient(180deg, #1f1910 0%, #0d0d0d 100%);
+        linear-gradient(180deg, #2a2a2a 0%, #111 100%);
     }
 
     .poster-kicker { color: #f3df9f; font-size: 12px; text-transform: uppercase; letter-spacing: .18em; }
@@ -302,8 +303,9 @@
       display: grid;
       gap: 10px;
       background:
-        linear-gradient(180deg, rgba(181,20,47,.12), rgba(255,255,255,.02)),
-        linear-gradient(180deg, #151515, #0f0f0f);
+        linear-gradient(180deg, rgba(212,17,17,.18), rgba(255,255,255,.02)),
+        linear-gradient(180deg, #181818, #101010);
+      border-left: 6px solid var(--red);
     }
 
     .promo-card strong { font-size: 18px; }
@@ -473,8 +475,9 @@
     .bracket-shell {
       padding: 22px;
       background:
-        radial-gradient(circle at 50% 0%, rgba(201,168,76,.08), transparent 25%),
-        linear-gradient(180deg, #141414, #0d0d0d);
+        linear-gradient(180deg, rgba(212,17,17,.14), rgba(212,17,17,0) 18%),
+        radial-gradient(circle at 50% 0%, rgba(199,154,24,.1), transparent 25%),
+        linear-gradient(180deg, #151515, #0d0d0d);
     }
 
     .bracket-meta {
@@ -540,9 +543,10 @@
       border-radius: 20px;
       background:
         linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.015)),
-        linear-gradient(180deg, #171717, #101010);
+        linear-gradient(180deg, #1a1a1a, #101010);
       border: 1px solid rgba(255,255,255,.08);
       box-shadow: 0 12px 24px rgba(0,0,0,.24);
+      overflow: hidden;
     }
 
     .match-card::before {
@@ -563,6 +567,7 @@
       border-radius: 16px;
       border: 1px solid rgba(255,255,255,.03);
       pointer-events: none;
+      box-shadow: inset 0 44px 0 rgba(212,17,17,.08);
     }
 
     .round-col:last-child .match-card::before,
@@ -663,9 +668,9 @@
       padding: 20px;
       border-radius: 24px;
       background:
-        radial-gradient(circle at 50% 0%, rgba(201,168,76,.28), transparent 36%),
-        linear-gradient(180deg, #1b1710, #111111 55%, #0f0f0f 100%);
-      border: 1px solid rgba(201,168,76,.42);
+        linear-gradient(180deg, rgba(255,255,255,.86), rgba(255,255,255,.78)),
+        linear-gradient(180deg, #ffffff, #e8e2d7 100%);
+      border: 3px solid rgba(199,154,24,.7);
       box-shadow: 0 22px 42px rgba(0,0,0,.34);
     }
 
@@ -683,13 +688,15 @@
       font-size: 34px;
       line-height: .92;
       text-align: center;
+      color: #20170a;
     }
 
     .champion-copy {
       text-align: center;
-      color: #d9cdab;
+      color: #5e4b24;
       line-height: 1.6;
       font-size: 14px;
+      font-weight: 700;
     }
 
     .empty-state {
@@ -1157,33 +1164,33 @@
         <section class="hero">
           <div class="hero-grid">
             <div class="hero-copy">
-              <div class="eyebrow">Spanish Legends · boxing promotion landing</div>
-              <h2 class="hero-title">SPANISH <span>LEGENDS</span></h2>
-              <p class="hero-description">La interfaz ahora cae mucho más en territorio boxeo: atmósfera de velada, jerarquía de cartel, guiños a cuerdas de ring y un bracket que se siente como cuadro oficial de torneo.</p>
+              <div class="eyebrow">Viernes 8 mayo · 20:30h · Madrid</div>
+              <h2 class="hero-title">SEMIFINALES <span>SPANISH LEGENDS</span></h2>
+              <p class="hero-description">Ahora la dirección visual pisa el terreno del cartel que me has pasado: rojo de combate, negro con collage, oro de cinturón y una home que parece anunciar una velada real.</p>
               <div class="hero-actions">
                 <a class="cta" href="#bracket">Ver bracket gráfico</a>
                 <a class="cta secondary" href="#fighters">Roster</a>
                 <a class="cta secondary" href="#events">Eventos</a>
               </div>
               <div class="brand-row" style="margin-top:18px;">
-                <span class="belt-mark">Fight Night Identity</span>
+                <span class="belt-mark">Boxing Talents Belt</span>
                 <span class="brand-pill">Spanish Legends</span>
-                <span class="brand-pill">Live bracket</span>
+                <span class="brand-pill">Combate profesional</span>
               </div>
               <div class="impact-strip">
-                <div class="impact-pill"><strong>12</strong><span>round energy</span></div>
-                <div class="impact-pill"><strong>KO</strong><span>visual language</span></div>
-                <div class="impact-pill"><strong>PPV</strong><span>fight-card feel</span></div>
+                <div class="impact-pill"><strong>8 MAYO</strong><span>main card</span></div>
+                <div class="impact-pill"><strong>BELT</strong><span>championship feel</span></div>
+                <div class="impact-pill"><strong>MADRID</strong><span>fight night</span></div>
               </div>
             </div>
             <div class="hero-side">
               <article class="hero-poster">
-                <div class="poster-kicker">Main event visual</div>
-                <div class="poster-title">Ring <span style="color:var(--gold-2);">Wars</span></div>
-                <p class="poster-subtitle">Cartel más agresivo, más arena y más sensación de combate profesional.</p>
+                <div class="poster-kicker">Combate profesional</div>
+                <div class="poster-title">BOXING <span style="color:var(--gold-2);">TALENTS</span></div>
+                <p class="poster-subtitle">Cinturón al centro, fondo de combate y una lectura visual mucho más cercana al póster de la velada.</p>
               </article>
               <article class="promo-card">
-                <div class="eyebrow">Current spotlight</div>
+                <div class="eyebrow">Featured bout</div>
                 <strong>${champion ? champion.name : activeBracket?.name || 'Championship mode'}</strong>
                 <p>${champion ? `Aspirante destacado al cinturón en ${champion.category}, con presencia de main event.` : 'Final pendiente con presencia de gran velada, listo para vender cartelera desde home.'}</p>
               </article>
@@ -1246,7 +1253,7 @@
           <div class="section-head">
             <div>
               <div class="eyebrow">Fight calendar</div>
-              <h2 class="section-title">Upcoming <span>fight nights</span></h2>
+              <h2 class="section-title">Upcoming <span>fight card</span></h2>
             </div>
             <p class="section-copy">Las veladas se presentan como cartelera: sede, fecha y estado con más tensión visual y menos pinta de dashboard genérico.</p>
           </div>
@@ -1262,7 +1269,7 @@
                   <p class="event-meta">${e.venue}</p>
                   <div class="brand-row">
                     <span class="brand-pill">Fight Night</span>
-                    <span class="brand-pill">Weigh-in soon</span>
+                    <span class="brand-pill">Boxing Talents</span>
                   </div>
                 </article>
               `).join('')}
@@ -1276,7 +1283,7 @@
           <div class="section-head">
             <div>
               <div class="eyebrow">Tournament board</div>
-              <h2 class="section-title">Official <span>bracket</span></h2>
+              <h2 class="section-title">Official <span>fight bracket</span></h2>
             </div>
             <p class="section-copy">Refinado para parecer un cuadro oficial de campeonato: columnas de rondas, narrativa de combates y cierre visual de cinturón.</p>
           </div>
