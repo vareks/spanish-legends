@@ -132,8 +132,9 @@
       border:1px solid #5a461c;
       background: linear-gradient(180deg, #14110d, #100e0b);
       border-radius: 10px;
-      padding: 8px;
+      padding: 10px;
       position:relative;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.03), 0 8px 20px rgba(0,0,0,.32);
     }
     .bracket-match::before {
       content: "";
@@ -144,6 +145,21 @@
       height: 2px;
       background: rgba(201,168,76,.5);
     }
+    .bracket-match::after {
+      content: "";
+      position:absolute;
+      right: -14px;
+      top: 50%;
+      width: 14px;
+      height: 36px;
+      transform: translateY(-50%);
+      border-right: 2px solid rgba(201,168,76,.45);
+      border-top: 2px solid rgba(201,168,76,.45);
+      border-bottom: 2px solid rgba(201,168,76,.45);
+      border-radius: 0 10px 10px 0;
+      pointer-events: none;
+    }
+    .round-col:last-child .bracket-match::after { display:none; }
     .fighter-slot {
       display:flex; justify-content:space-between; gap:8px;
       font-family: "Trebuchet MS", Arial, sans-serif;
@@ -161,6 +177,37 @@
       background: linear-gradient(90deg, rgba(255,255,255,.04), rgba(255,255,255,.01));
     }
     .fighter-slot .seed { color: #ebc866; font-size: 12px; }
+    .fighter-profile {
+      display:grid;
+      grid-template-columns: 86px 1fr;
+      gap: 12px;
+      align-items:start;
+    }
+    .fighter-photo {
+      width:86px;
+      height:106px;
+      border-radius:8px;
+      border:1px solid #6c5522;
+      object-fit: cover;
+      background: #101010;
+      box-shadow: 0 10px 24px rgba(0,0,0,.35);
+    }
+    .fighter-meta h3 { line-height: 1.1; }
+    .fighter-badges {
+      display:flex;
+      gap: 6px;
+      flex-wrap:wrap;
+      margin-top:8px;
+    }
+    .fighter-badge {
+      border:1px solid #5f4a1e;
+      background: rgba(201,168,76,.11);
+      color: #efd58a;
+      border-radius: 999px;
+      padding:2px 8px;
+      font-size: 11px;
+      font-family: "Trebuchet MS", Arial, sans-serif;
+    }
     .brand-strip {
       border-top:1px solid var(--border);
       margin-top:14px;
@@ -203,10 +250,10 @@
       ui: { activeTab: 'public', adminSection: 'fighters', isAdmin: false },
       adminPass: 'boxing123',
       fighters: [
-        { id: crypto.randomUUID(), name: 'Carlos Mendoza', city: 'Vigo', gym: 'La Vieja Escuela', category: 'Peso Welter', weight: 66.2, wins: 18, losses: 2, draws: 0, kos: 14 },
-        { id: crypto.randomUUID(), name: 'Danny Reyes', city: 'Madrid', gym: 'Puño Norte', category: 'Peso Ligero', weight: 60.4, wins: 16, losses: 1, draws: 1, kos: 9 },
-        { id: crypto.randomUUID(), name: 'Iván Cortés', city: 'Sevilla', gym: 'South Ring', category: 'Peso Medio', weight: 71.8, wins: 13, losses: 0, draws: 0, kos: 8 },
-        { id: crypto.randomUUID(), name: 'Leo Vargas', city: 'Bilbao', gym: 'Old School Gym', category: 'Peso Pluma', weight: 56.8, wins: 20, losses: 3, draws: 0, kos: 11 }
+        { id: crypto.randomUUID(), name: 'Carlos Mendoza', city: 'Vigo', gym: 'La Vieja Escuela', category: 'Peso Welter', weight: 66.2, wins: 18, losses: 2, draws: 0, kos: 14, photo: 'https://placehold.co/240x300/1a1714/F8F2DF?text=Carlos+Mendoza' },
+        { id: crypto.randomUUID(), name: 'Danny Reyes', city: 'Madrid', gym: 'Puño Norte', category: 'Peso Ligero', weight: 60.4, wins: 16, losses: 1, draws: 1, kos: 9, photo: 'https://placehold.co/240x300/111018/F8F2DF?text=Danny+Reyes' },
+        { id: crypto.randomUUID(), name: 'Iván Cortés', city: 'Sevilla', gym: 'South Ring', category: 'Peso Medio', weight: 71.8, wins: 13, losses: 0, draws: 0, kos: 8, photo: 'https://placehold.co/240x300/15110d/F8F2DF?text=Ivan+Cortes' },
+        { id: crypto.randomUUID(), name: 'Leo Vargas', city: 'Bilbao', gym: 'Old School Gym', category: 'Peso Pluma', weight: 56.8, wins: 20, losses: 3, draws: 0, kos: 11, photo: 'https://placehold.co/240x300/10131a/F8F2DF?text=Leo+Vargas' }
       ],
       events: [
         { id: crypto.randomUUID(), name: 'Night of Talents', date: '2026-05-12', venue: 'Madrid Arena', status: 'Programado' },
@@ -227,6 +274,10 @@
         return {
           ...structuredClone(DEFAULT_STATE),
           ...parsed,
+          fighters: (parsed.fighters || DEFAULT_STATE.fighters).map(f => ({
+            ...f,
+            photo: f.photo || `https://placehold.co/240x300/1a1714/F8F2DF?text=${encodeURIComponent(f.name || 'Boxeador')}`
+          })),
           ui: { ...DEFAULT_STATE.ui, ...(parsed.ui || {}), isAdmin: false }
         };
       } catch {
@@ -253,6 +304,7 @@
     function validateFighter(payload) {
       const required = ['name', 'city', 'gym', 'category'];
       for (const field of required) if (!payload[field]) return `${field} es obligatorio`;
+      if (!payload.photo) return 'La foto es obligatoria';
       const weight = Number(payload.weight);
       if (!Number.isFinite(weight) || weight <= 0) return 'Peso inválido';
       const klass = findWeightClass(payload.category);
@@ -368,10 +420,19 @@
           <div class="grid">
             ${state.fighters.map(f => `
               <article class="card fighter">
-                <div class="tag">${f.category}</div>
-                <h3>${f.name}</h3>
-                <p>${f.city} · ${f.gym}</p>
-                <div class="record">${f.wins}-${f.losses}-${f.draws} · ${f.kos} KO · ${f.weight}kg</div>
+                <div class="fighter-profile">
+                  <img class="fighter-photo" src="${f.photo}" alt="Foto de ${f.name}" loading="lazy" />
+                  <div class="fighter-meta">
+                    <div class="tag">${f.category}</div>
+                    <h3>${f.name}</h3>
+                    <p>${f.city} · ${f.gym}</p>
+                    <div class="record">${f.wins}-${f.losses}-${f.draws} · ${f.kos} KO · ${f.weight}kg</div>
+                    <div class="fighter-badges">
+                      <span class="fighter-badge">Récord ${f.wins}-${f.losses}-${f.draws}</span>
+                      <span class="fighter-badge">${f.kos} KO</span>
+                    </div>
+                  </div>
+                </div>
               </article>`).join('')}
           </div>
         </section>
@@ -423,6 +484,7 @@
         <form id="fighter-form">
           <div class="form-grid">
             <input name="name" placeholder="Nombre" required value="${editing?.name || ''}" />
+            <input name="photo" type="url" placeholder="URL de foto (tipo BoxRec)" required value="${editing?.photo || ''}" />
             <input name="city" placeholder="Ciudad" required value="${editing?.city || ''}" />
             <input name="gym" placeholder="Gimnasio" required value="${editing?.gym || ''}" />
             <select name="category" required>${categoryOptions(editing?.category || 'Peso Ligero')}</select>
@@ -439,10 +501,15 @@
         <div class="list">
           ${state.fighters.map(f => `
             <article class="card">
-              <div class="tag">${f.category}</div>
-              <strong>${f.name}</strong>
-              <p>${f.city} · ${f.gym} · ${f.weight}kg</p>
-              <p class="record">${f.wins}-${f.losses}-${f.draws} · ${f.kos} KO</p>
+              <div class="fighter-profile">
+                <img class="fighter-photo" src="${f.photo}" alt="Foto de ${f.name}" loading="lazy" />
+                <div class="fighter-meta">
+                  <div class="tag">${f.category}</div>
+                  <strong>${f.name}</strong>
+                  <p>${f.city} · ${f.gym} · ${f.weight}kg</p>
+                  <p class="record">${f.wins}-${f.losses}-${f.draws} · ${f.kos} KO</p>
+                </div>
+              </div>
               <div class="item-actions">
                 <button data-action="edit-fighter" data-id="${f.id}" class="secondary">Editar</button>
                 <button data-action="delete-fighter" data-id="${f.id}">Eliminar</button>
