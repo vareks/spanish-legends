@@ -399,9 +399,11 @@
       min-height: 100%;
       padding: 0;
       overflow: hidden;
-      background: #f4f1ea;
-      border: 1px solid #d7d0c4;
-      box-shadow: 0 12px 24px rgba(0,0,0,.16);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01)),
+        linear-gradient(180deg, #181818, #111111);
+      border: 1px solid rgba(255,255,255,.08);
+      box-shadow: 0 14px 26px rgba(0,0,0,.22);
     }
 
     .fighter-hero {
@@ -411,29 +413,31 @@
       gap: 14px;
       align-items: start;
       padding: 14px;
-      background: linear-gradient(180deg, #faf8f3, #efe8da);
-      border-bottom: 1px solid #d8cfbf;
+      background:
+        linear-gradient(180deg, rgba(212,17,17,.12), rgba(212,17,17,0) 26%),
+        linear-gradient(180deg, #1d1d1d, #151515);
+      border-bottom: 1px solid rgba(255,255,255,.08);
     }
 
     .fighter-photo {
       width: 96px;
       height: 122px;
-      border-radius: 8px;
+      border-radius: 10px;
       object-fit: cover;
-      border: 1px solid #b8ae9c;
-      background: #ddd7cb;
-      box-shadow: none;
+      border: 1px solid rgba(255,255,255,.1);
+      background: #1c1c1c;
+      box-shadow: 0 10px 20px rgba(0,0,0,.22);
     }
 
     .fighter-name {
       font-size: 28px;
       line-height: .9;
-      color: #181512;
+      color: #f5ecda;
     }
 
     .fighter-card .fighter-meta,
     .fighter-card .record {
-      color: #51483b;
+      color: #b9ab8c;
     }
 
     .fighter-meta,
@@ -451,14 +455,14 @@
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 0;
-      background: #ffffff;
-      border-bottom: 1px solid #ddd5c7;
+      background: #121212;
+      border-bottom: 1px solid rgba(255,255,255,.08);
     }
 
     .fighter-stat {
       padding: 12px 10px;
-      background: #fffdfa;
-      border-right: 1px solid #e2dbcf;
+      background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+      border-right: 1px solid rgba(255,255,255,.06);
       text-align: center;
     }
 
@@ -470,19 +474,19 @@
       font-size: 20px;
       line-height: 1;
       font-weight: 900;
-      color: #1c1916;
+      color: var(--gold-2);
     }
 
     .fighter-stat span {
       font-size: 10px;
       text-transform: uppercase;
       letter-spacing: .12em;
-      color: #7a705d;
+      color: #8f8368;
     }
 
     .fighter-table {
       display: grid;
-      background: #ffffff;
+      background: #151515;
     }
 
     .fighter-row {
@@ -490,22 +494,22 @@
       grid-template-columns: 110px 1fr;
       gap: 12px;
       padding: 10px 14px;
-      border-top: 1px solid #ece5d9;
+      border-top: 1px solid rgba(255,255,255,.06);
       font-size: 13px;
-      color: #28231d;
+      color: #dbd0b8;
     }
 
     .fighter-row dt {
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: .08em;
-      color: #7c6f5a;
+      color: #8f8368;
     }
 
     .fighter-row dd {
       margin: 0;
       font-weight: 600;
-      color: #221d18;
+      color: #f3ead7;
     }
 
     .event-card {
