@@ -600,11 +600,11 @@
     }
 
     .bracket-shell {
-      padding: 22px;
-      background:
-        linear-gradient(180deg, rgba(212,17,17,.14), rgba(212,17,17,0) 18%),
-        radial-gradient(circle at 50% 0%, rgba(199,154,24,.1), transparent 25%),
-        linear-gradient(180deg, #151515, #0d0d0d);
+      padding: 0;
+      overflow: hidden;
+      background: #f5f2eb;
+      border: 1px solid #d8cfbf;
+      box-shadow: 0 18px 32px rgba(0,0,0,.18);
     }
 
     .bracket-meta {
@@ -613,95 +613,113 @@
       gap: 16px;
       align-items: center;
       flex-wrap: wrap;
-      margin-bottom: 20px;
+      padding: 18px 22px 10px;
+      color: #221c13;
     }
 
     .bracket-name {
-      font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
-      font-size: clamp(32px, 5vw, 48px);
-      line-height: .92;
+      font-family: Inter, system-ui, sans-serif;
+      font-size: clamp(24px, 4vw, 34px);
+      line-height: 1;
+      font-weight: 900;
       text-transform: uppercase;
+      letter-spacing: .04em;
+      color: #15120e;
     }
 
-    .bracket-subcopy { color: var(--muted); line-height: 1.55; }
+    .bracket-subcopy {
+      color: #5b5245;
+      line-height: 1.5;
+      max-width: 62ch;
+    }
 
     .bracket-graphic {
       overflow-x: auto;
-      padding-bottom: 12px;
+      padding: 0 0 18px;
     }
 
     .bracket-grid {
       display: grid;
       grid-auto-flow: column;
-      grid-auto-columns: minmax(300px, 1fr);
-      gap: 28px;
+      grid-auto-columns: minmax(240px, 1fr);
+      gap: 0;
       min-width: max-content;
       align-items: start;
-      padding: 10px 8px 18px;
+      padding: 0 14px 18px;
     }
 
     .round-col {
       position: relative;
       display: grid;
-      gap: var(--match-gap, 24px);
-      padding-top: var(--round-offset, 0px);
-      min-width: 300px;
+      gap: var(--match-gap, 42px);
+      padding: var(--round-offset, 18px) 14px 0;
+      min-width: 240px;
     }
 
     .round-col::after {
       content: "";
       position: absolute;
-      top: 58px;
-      right: -14px;
-      bottom: 26px;
+      top: 76px;
+      right: -1px;
       width: 2px;
-      background: linear-gradient(180deg, transparent, rgba(201,168,76,.3), transparent);
+      height: calc(100% - 92px);
+      background: #1d1d1d;
+      opacity: .85;
     }
 
     .round-col:last-child::after,
     .round-col.champion-col::after { display: none; }
 
-    .round-title { width: fit-content; margin-bottom: 2px; }
-    .round-subtitle { font-size: 12px; margin-top: -4px; }
+    .round-title {
+      display: block;
+      width: calc(100% + 28px);
+      margin: 0 -14px 8px;
+      padding: 8px 14px;
+      border-radius: 0;
+      text-align: left;
+      font-family: Inter, system-ui, sans-serif;
+      font-size: 12px;
+      letter-spacing: .03em;
+      background: linear-gradient(180deg, #d7b342, #caa22e);
+      color: #16120b;
+      box-shadow: none;
+      border: 0;
+    }
+
+    .round-subtitle {
+      font-size: 11px;
+      margin-top: -2px;
+      color: #6b6358;
+      padding-left: 2px;
+    }
 
     .match-card {
       position: relative;
-      padding: 14px;
-      border-radius: 20px;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.015)),
-        linear-gradient(180deg, #1a1a1a, #101010);
-      border: 1px solid rgba(255,255,255,.08);
-      box-shadow: 0 12px 24px rgba(0,0,0,.24);
-      overflow: hidden;
+      padding: 0;
+      border-radius: 0;
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+      overflow: visible;
     }
 
     .match-card::before {
       content: "";
       position: absolute;
-      right: -15px;
+      right: -16px;
       top: 50%;
-      width: 15px;
+      width: 16px;
       height: 2px;
-      background: rgba(201,168,76,.55);
+      background: #1f1f1f;
       transform: translateY(-50%);
     }
 
-    .match-card::after {
-      content: "";
-      position: absolute;
-      inset: 8px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.03);
-      pointer-events: none;
-      box-shadow: inset 0 44px 0 rgba(212,17,17,.08);
-    }
+    .match-card::after { display: none; }
 
     .round-col:last-child .match-card::before,
     .champion-col .match-card::before { display: none; }
 
     .match-topline,
-    .fighter-slot,
     .champion-card,
     .admin-shell,
     .form-grid {
@@ -712,116 +730,134 @@
     .match-topline {
       grid-template-columns: 1fr auto;
       align-items: center;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
+      padding: 0 2px;
     }
 
-    .match-vs { font-size: 22px; line-height: .92; }
+    .match-vs {
+      font-size: 16px;
+      line-height: 1;
+      color: #16120b;
+      font-family: Inter, system-ui, sans-serif;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .02em;
+    }
 
     .fighter-slot {
-      grid-template-columns: 56px 1fr auto;
+      grid-template-columns: 1fr auto;
       align-items: center;
-      gap: 12px;
-      padding: 10px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.06);
-      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+      gap: 10px;
+      padding: 12px 12px;
+      min-height: 44px;
+      border-radius: 0;
+      border: 2px solid #1c1c1c;
+      background: #fffdfa;
+      color: #1b1712;
+      box-shadow: none;
+      display: grid;
     }
 
-    .fighter-slot + .fighter-slot { margin-top: 10px; }
+    .fighter-slot + .fighter-slot { margin-top: 8px; }
 
     .fighter-slot.winner {
-      border-color: rgba(201,168,76,.55);
-      background: linear-gradient(90deg, rgba(201,168,76,.22), rgba(201,168,76,.04));
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.03);
+      border-color: #1c1c1c;
+      background: #fffdfa;
     }
 
     .fighter-slot.pending {
-      opacity: .88;
+      opacity: 1;
     }
 
-    .slot-photo {
-      width: 56px;
-      height: 56px;
-      border-radius: 14px;
-      object-fit: cover;
-      background: #0f0f0f;
-      border: 1px solid rgba(255,255,255,.08);
-    }
+    .slot-photo { display: none; }
 
     .slot-name {
-      font-weight: 800;
+      font-weight: 700;
       font-size: 14px;
-      color: #f5efdc;
+      color: #1f1a13;
     }
 
     .slot-meta {
       font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: .14em;
-      color: var(--muted);
-      margin-top: 3px;
+      letter-spacing: 0;
+      color: #4c4438;
+      margin-top: 2px;
+      text-transform: none;
     }
 
     .slot-seed,
     .winner-chip {
       justify-self: end;
-      border-radius: 999px;
-      padding: 7px 10px;
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: .14em;
-      font-weight: 800;
-      border: 1px solid rgba(255,255,255,.08);
-      color: #eadfbe;
-      background: rgba(255,255,255,.03);
+      border-radius: 0;
+      padding: 0;
+      font-size: 13px;
+      letter-spacing: 0;
+      font-weight: 700;
+      border: 0;
+      color: #222;
+      background: transparent;
     }
 
     .winner-chip {
-      color: #1b1407;
-      background: linear-gradient(180deg, var(--gold-2), var(--gold));
-      border-color: #8f722e;
+      color: #222;
+      background: transparent;
     }
 
     .champion-col {
       min-width: 320px;
-      align-self: center;
-      padding-top: 90px;
+      align-self: start;
+      padding-top: 18px;
     }
 
     .champion-card {
-      align-content: start;
-      gap: 16px;
-      min-height: 260px;
-      padding: 20px;
-      border-radius: 24px;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.86), rgba(255,255,255,.78)),
-        linear-gradient(180deg, #ffffff, #e8e2d7 100%);
-      border: 3px solid rgba(199,154,24,.7);
-      box-shadow: 0 22px 42px rgba(0,0,0,.34);
+      align-content: center;
+      justify-items: center;
+      gap: 14px;
+      min-height: 320px;
+      padding: 24px 20px;
+      border-radius: 0;
+      background: #fffdfa;
+      border: 2px solid #1d1d1d;
+      box-shadow: none;
     }
 
-    .champion-card img {
-      width: 100%;
-      max-width: 180px;
-      aspect-ratio: 1 / 1.08;
-      object-fit: cover;
-      margin: 0 auto;
-      border-radius: 22px;
-      border: 1px solid rgba(255,255,255,.1);
+    .bracket-medal {
+      width: 120px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #fff7c9, #e4c152 40%, #b98717 72%, #7d5d12 100%);
+      border: 6px solid #d7b342;
+      box-shadow: inset 0 0 0 3px rgba(255,255,255,.35), 0 10px 18px rgba(0,0,0,.12);
+      position: relative;
     }
+
+    .bracket-medal::before {
+      content: "BOXING\A TALENTS";
+      white-space: pre;
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+      font-size: 22px;
+      line-height: .9;
+      color: rgba(128, 90, 9, .9);
+      text-align: center;
+    }
+
+    .champion-card img { display: none; }
 
     .champion-name {
-      font-size: 34px;
-      line-height: .92;
+      font-size: 30px;
+      line-height: .95;
       text-align: center;
-      color: #20170a;
+      color: #1f180d;
     }
 
     .champion-copy {
       text-align: center;
-      color: #5e4b24;
-      line-height: 1.6;
+      color: #433724;
+      line-height: 1.5;
       font-size: 14px;
       font-weight: 700;
     }
@@ -901,9 +937,9 @@
       .slot-seed,
       .winner-chip { grid-column: 2; justify-self: start; }
       .slot-photo { width: 46px; height: 46px; border-radius: 12px; }
-      .bracket-grid { grid-auto-columns: minmax(270px, 1fr); }
+      .bracket-grid { grid-auto-columns: minmax(220px, 1fr); }
       .round-col,
-      .champion-col { min-width: 270px; }
+      .champion-col { min-width: 220px; }
       .impact-strip,
       .fighter-profile-grid { grid-template-columns: 1fr; }
       .fighter-profile-panel { grid-template-columns: 1fr; }
@@ -1206,12 +1242,11 @@
       const fighter = fighterById(fighterId);
       return `
         <div class="fighter-slot ${isWinner ? 'winner' : 'pending'}">
-          <img class="slot-photo" src="${fighter?.photo || placeholderPhoto(fighter?.name || slotLabel)}" alt="${fighter?.name || slotLabel}" loading="lazy" />
           <div>
             <div class="slot-name">${fighter?.name || 'Pendiente'}</div>
-            <div class="slot-meta">${fighter ? `${fighter.city} · ${fighter.category}` : 'Por definir'}</div>
+            <div class="slot-meta">${fighter ? `(${fighter.city} · ${fighter.gym})` : 'Por definir'}</div>
           </div>
-          <span class="${isWinner ? 'winner-chip' : 'slot-seed'}">${isWinner ? 'Winner' : slotLabel}</span>
+          <span class="${isWinner ? 'winner-chip' : 'slot-seed'}">${slotLabel}</span>
         </div>
       `;
     }
@@ -1222,42 +1257,43 @@
       }
 
       const champion = getChampion(bracket);
+      const boxerCount = (bracket.rounds?.[0]?.matches?.length || 0) * 2;
 
       return `
         <article class="card bracket-shell">
           <div class="bracket-meta">
             <div>
-              <div class="eyebrow">Fight card bracket · league mode</div>
+              <div class="eyebrow">Formato oficial de cuadro</div>
               <div class="bracket-name">${bracket.name}</div>
-              <p class="bracket-subcopy">Bracket con lectura de cartelera: cruces visibles, sensación de cuadro oficial y tarjetas pensadas para una noche de boxeo, no solo para un dashboard.</p>
+              <p class="bracket-subcopy">Tablero inspirado en el formato real de la liga: cabeceras limpias, cruces oficiales y final resuelta con cinturón y ganadora destacada.</p>
             </div>
             <div class="brand-row">
-              <span class="belt-mark">Season ${bracket.season || '2026'}</span>
-              <span class="brand-pill">${bracket.venue || 'Fight Dome'}</span>
-              <span class="brand-pill">Bracket gráfico</span>
+              <span class="belt-mark">${champion?.category || 'Spanish Legends'}</span>
+              <span class="brand-pill">Nº Boxeadores: ${boxerCount || 0}</span>
             </div>
           </div>
           <div class="bracket-graphic">
             <div class="bracket-grid">
               ${bracket.rounds.map((round, roundIndex) => `
-                <section class="round-col" style="--round-offset:${roundIndex * 54}px; --match-gap:${24 + roundIndex * 46}px;">
+                <section class="round-col" style="--round-offset:${18 + roundIndex * 52}px; --match-gap:${28 + roundIndex * 48}px;">
                   <div>
                     <span class="round-title">${round.name}</span>
-                    <p class="round-subtitle">${round.matches.length} combate${round.matches.length !== 1 ? 's' : ''}</p>
+                    <p class="round-subtitle">${round.matches.length} cruce${round.matches.length !== 1 ? 's' : ''}</p>
                   </div>
                   ${round.matches.map((match, matchIndex) => {
                     const fighter1 = fighterById(match.fighter1Id);
                     const fighter2 = fighterById(match.fighter2Id);
-                    const matchTitle = fighter1 && fighter2 ? `${fighter1.name.split(' ')[0]} vs ${fighter2.name.split(' ')[0]}` : `Bout ${matchIndex + 1}`;
+                    const winnerA = match.winnerId && match.winnerId === match.fighter1Id;
+                    const winnerB = match.winnerId && match.winnerId === match.fighter2Id;
                     return `
                       <article class="match-card">
                         <div class="match-topline">
-                          <div class="match-vs">${matchTitle}</div>
+                          <div class="match-vs">Combate ${matchIndex + 1}</div>
                           <span class="status-chip">${match.method || 'Pendiente'}</span>
                         </div>
-                        ${renderFighterSlot(match, match.fighter1Id, 'A', match.winnerId && match.winnerId === match.fighter1Id)}
-                        ${renderFighterSlot(match, match.fighter2Id, 'B', match.winnerId && match.winnerId === match.fighter2Id)}
-                        <p class="match-note">${match.scheduled ? `Walkout estimado · ${match.scheduled}` : 'Esperando decisión oficial para cerrar el pase a la siguiente esquina del cuadro.'}</p>
+                        ${renderFighterSlot(match, match.fighter1Id, String((matchIndex * 2) + 1), winnerA)}
+                        ${renderFighterSlot(match, match.fighter2Id, String((matchIndex * 2) + 2), winnerB)}
+                        <p class="match-note">${match.scheduled ? `Horario · ${match.scheduled}` : 'Cuadro pendiente de resolución oficial.'}</p>
                       </article>
                     `;
                   }).join('')}
@@ -1265,16 +1301,16 @@
               `).join('')}
               <section class="round-col champion-col">
                 <div>
-                  <span class="round-title">Champion</span>
-                  <p class="round-subtitle">Cinturón Spanish Legends</p>
+                  <span class="round-title">Final</span>
+                  <p class="round-subtitle">Resultado oficial</p>
                 </div>
                 <article class="champion-card">
-                  <img src="${champion?.photo || placeholderPhoto(champion?.name || 'Champion')}" alt="${champion?.name || 'Champion'}" loading="lazy" />
-                  <div class="champion-name">${champion ? champion.name : '<span>Pending</span> Winner'}</div>
-                  <p class="champion-copy">${champion ? `${champion.city} · ${champion.category} · ${champion.wins}-${champion.losses}-${champion.draws}` : 'La tarjeta final queda lista para coronar al campeón cuando se cierre la última pelea.'}</p>
+                  <div class="bracket-medal"></div>
+                  <div class="champion-name">${champion ? champion.name : 'Ganadora pendiente'}</div>
+                  <p class="champion-copy">${champion ? `${champion.city} · ${champion.gym} · ${champion.wins}-${champion.losses}-${champion.draws}` : 'La final mostrará aquí a la campeona una vez se cierre el último cruce.'}</p>
                   <div class="brand-row">
-                    <span class="belt-mark">Main Event</span>
-                    <span class="brand-pill">Championship board</span>
+                    <span class="belt-mark">Boxing Talents</span>
+                    <span class="brand-pill">Champion</span>
                   </div>
                 </article>
               </section>
