@@ -1090,6 +1090,7 @@
         venue: 'Madrid Fight Dome',
         isActive: true,
         rounds,
+        participantIds: [...participants],
         participantCount: participants.length,
         bracketSize: nextPowerOfTwo(participants.length)
       };
@@ -1134,9 +1135,12 @@
     }
 
     function enrichBracket(bracket, fallbackFighters) {
-      const participants = fallbackFighters.slice(0, Math.max(2, Math.min(8, fallbackFighters.length))).map(f => f.id);
+      const fallbackParticipantIds = fallbackFighters.slice(0, Math.max(2, Math.min(8, fallbackFighters.length))).map(f => f.id);
+      const participantIds = Array.isArray(bracket?.participantIds) && bracket.participantIds.length
+        ? [...new Set(bracket.participantIds.filter(Boolean))]
+        : fallbackParticipantIds;
       const rounds = normalizeRounds(bracket?.rounds);
-      const safeRounds = rounds.length ? rounds : buildBracketRounds(participants, getRoundName(nextPowerOfTwo(participants.length)));
+      const safeRounds = rounds.length ? rounds : buildBracketRounds(participantIds, getRoundName(nextPowerOfTwo(participantIds.length)));
       propagateBracketForward(safeRounds, 0);
 
       const participantCount = bracket?.participantCount || new Set((safeRounds[0]?.matches || []).flatMap(match => [match.fighter1Id, match.fighter2Id]).filter(Boolean)).size;
@@ -1147,6 +1151,7 @@
         venue: bracket?.venue || 'Rockanbox Arena',
         isActive: bracket?.isActive !== false,
         rounds: safeRounds,
+        participantIds,
         participantCount,
         bracketSize: bracket?.bracketSize || nextPowerOfTwo(Math.max(2, participantCount))
       };
@@ -1437,11 +1442,11 @@
               <p class="hero-description">Ahora la dirección visual pisa el terreno del cartel que me has pasado: rojo de combate, negro con collage, oro de cinturón y una home que parece anunciar una velada real.</p>
               <div class="hero-actions">
                 <a class="cta" href="#bracket">Ver bracket gráfico</a>
-                <a class="cta secondary" href="#fighters">Roster</a>
+                <a class="cta secondary" href="#fighters">Boxeadores</a>
                 <a class="cta secondary" href="#events">Eventos</a>
               </div>
               <div class="brand-row" style="margin-top:18px;">
-                <span class="belt-mark">Boxing Talents Belt</span>
+                <span class="belt-mark">Cinturón Boxing Talents</span>
                 <span class="brand-pill">Spanish Legends</span>
                 <span class="brand-pill">Combate profesional</span>
               </div>
@@ -1468,9 +1473,9 @@
 
         <section class="stats">
           <article class="card stat-card">
-            <div class="label">Boxeadores en roster</div>
+            <div class="label">Boxeadores en plantilla</div>
             <div class="stat-number">${state.fighters.length}</div>
-            <p class="stat-copy">Perfiles con presencia de fighter card, récord visible y lectura inmediata de esquina.</p>
+            <p class="stat-copy">Perfiles con ficha destacada, récord visible y lectura inmediata de esquina.</p>
           </article>
           <article class="card stat-card">
             <div class="label">Eventos próximos</div>
@@ -1529,7 +1534,7 @@
             <div class="section-head">
               <div>
                 <div class="eyebrow">Perfil del boxeador</div>
-                <h2 class="section-title">${selectedFighter.name.split(' ')[0]} <span>card</span></h2>
+                <h2 class="section-title">${selectedFighter.name.split(' ')[0]} <span>ficha</span></h2>
               </div>
               <p class="section-copy">Al hacer click en un boxeador, aterrizas en su ficha destacada con sus datos principales y su contexto competitivo.</p>
             </div>
@@ -1760,16 +1765,16 @@
       app.innerHTML = `
         <div class="topbar">
           <div>
-            <p class="label">Spanish Legends · fight-night redesign</p>
+            <p class="label">Spanish Legends · rediseño de noche de combate</p>
             <h1 class="page-title">Spanish <span>Legends</span></h1>
           </div>
           <div class="tabs">
             <button class="tab ${state.ui.activeTab === 'public' ? 'active' : 'secondary'}" data-action="set-tab" data-tab="public">Público</button>
-            <button class="tab ${state.ui.activeTab === 'admin' ? 'active' : 'secondary'}" data-action="set-tab" data-tab="admin">Admin</button>
+            <button class="tab ${state.ui.activeTab === 'admin' ? 'active' : 'secondary'}" data-action="set-tab" data-tab="admin">Administración</button>
           </div>
         </div>
         ${state.ui.activeTab === 'public' ? publicView() : adminView()}
-        <footer>Spanish Legends · estética fight-night, bracket oficial y presencia más cercana al boxeo profesional.</footer>
+        <footer>Spanish Legends · estética de noche de combate, bracket oficial y presencia más cercana al boxeo profesional.</footer>
       `;
       bindEvents();
     }
@@ -1897,7 +1902,15 @@
       });
 
       document.querySelectorAll('[data-action="delete-event"]').forEach(btn => btn.onclick = () => {
-        setState(s => ({ ...s, events: s.events.filter(ev => ev.id !== btn.dataset.id) }));
+        const eventId = btn.dataset.id;
+        const event = state.events.find(ev => ev.id === eventId);
+        const msg = document.getElementById('event-msg');
+        if (!confirm(`¿Seguro que quieres eliminar el evento ${event?.name || 'seleccionado'}?`)) return;
+        setState(s => ({ ...s, events: s.events.filter(ev => ev.id !== eventId) }));
+        if (msg) {
+          msg.className = 'ok';
+          msg.textContent = `Evento eliminado: ${event?.name || 'sin nombre'}`;
+        }
       });
 
       const bracketForm = document.getElementById('bracket-form');
@@ -1924,6 +1937,7 @@
               season: new Date().getFullYear().toString(),
               venue: 'Venue por definir',
               rounds,
+              participantIds: [...uniqueParticipants],
               participantCount: uniqueParticipants.length,
               bracketSize: nextPowerOfTwo(uniqueParticipants.length),
               isActive: true
