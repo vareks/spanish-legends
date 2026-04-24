@@ -1231,7 +1231,16 @@
       if (participants.length > 8) {
         return 'Por ahora el bracket soporta entre 2 y 8 participantes';
       }
+      if (new Set(participants).size !== participants.length) {
+        return 'No puedes repetir el mismo boxeador dentro del bracket';
+      }
       return null;
+    }
+
+    function fighterIsUsedInBrackets(fighterId, brackets = state.brackets) {
+      return brackets.some(bracket => bracket.rounds?.some(round => round.matches?.some(match => (
+        match.fighter1Id === fighterId || match.fighter2Id === fighterId || match.winnerId === fighterId
+      ))));
     }
 
     function toDateOnly(value) {
@@ -1317,7 +1326,7 @@
       const match = clone.rounds?.[roundIndex]?.matches?.[matchIndex];
       if (!match) return clone;
       match.winnerId = winnerId;
-      match.method = roundIndex === clone.rounds.length - 1 ? 'Champion decided' : 'Ganador confirmado';
+      match.method = roundIndex === clone.rounds.length - 1 ? 'Campeón decidido' : 'Ganador confirmado';
       propagateBracketForward(clone.rounds, roundIndex);
       return clone;
     }
@@ -1403,7 +1412,7 @@
                   <p class="champion-copy">${champion ? `${champion.city} · ${champion.gym} · ${champion.wins}-${champion.losses}-${champion.draws}` : 'La final mostrará aquí a la campeona una vez se cierre el último cruce.'}</p>
                   <div class="brand-row">
                     <span class="belt-mark">Boxing Talents</span>
-                    <span class="brand-pill">Champion</span>
+                    <span class="brand-pill">Campeón</span>
                   </div>
                 </article>
               </section>
@@ -1437,9 +1446,9 @@
                 <span class="brand-pill">Combate profesional</span>
               </div>
               <div class="impact-strip">
-                <div class="impact-pill"><strong>8 MAYO</strong><span>main card</span></div>
-                <div class="impact-pill"><strong>BELT</strong><span>title energy</span></div>
-                <div class="impact-pill"><strong>MADRID</strong><span>fight night</span></div>
+                <div class="impact-pill"><strong>8 MAYO</strong><span>cartel principal</span></div>
+                <div class="impact-pill"><strong>CINTURÓN</strong><span>tensión titular</span></div>
+                <div class="impact-pill"><strong>MADRID</strong><span>noche de combate</span></div>
               </div>
             </div>
             <div class="hero-side">
@@ -1449,9 +1458,9 @@
                 <p class="poster-subtitle">Cinturón al centro, fondo de combate y una lectura visual mucho más cercana al póster de la velada.</p>
               </article>
               <article class="promo-card">
-                <div class="eyebrow">Featured bout</div>
-                <strong>${champion ? champion.name : activeBracket?.name || 'Championship mode'}</strong>
-                <p>${champion ? `Aspirante destacado al cinturón en ${champion.category}, con presencia de main event.` : 'Final pendiente con presencia de gran velada, listo para vender cartelera desde home.'}</p>
+                <div class="eyebrow">Combate destacado</div>
+                <strong>${champion ? champion.name : activeBracket?.name || 'Modo campeonato'}</strong>
+                <p>${champion ? `Aspirante destacado al cinturón en ${champion.category}, con presencia de combate estelar.` : 'Final pendiente con presencia de gran velada, lista para vender cartelera desde la home.'}</p>
               </article>
             </div>
           </div>
@@ -1478,8 +1487,8 @@
         <section id="fighters" class="section">
           <div class="section-head">
             <div>
-              <div class="eyebrow">Roster</div>
-              <h2 class="section-title">Fight <span>roster</span></h2>
+              <div class="eyebrow">Boxeadores</div>
+              <h2 class="section-title">Roster de <span>combate</span></h2>
             </div>
             <p class="section-copy">Las fichas empujan más hacia un universo de boxeo real: foto dominante, récord al frente y sensación de póster de presentación.</p>
           </div>
@@ -1499,9 +1508,9 @@
                   </div>
                 </div>
                 <div class="fighter-record">
-                  <div class="fighter-stat"><strong>${f.wins}</strong><span>Wins</span></div>
-                  <div class="fighter-stat"><strong>${f.losses}</strong><span>Losses</span></div>
-                  <div class="fighter-stat"><strong>${f.draws}</strong><span>Draws</span></div>
+                  <div class="fighter-stat"><strong>${f.wins}</strong><span>Victorias</span></div>
+                  <div class="fighter-stat"><strong>${f.losses}</strong><span>Derrotas</span></div>
+                  <div class="fighter-stat"><strong>${f.draws}</strong><span>Nulos</span></div>
                   <div class="fighter-stat"><strong>${f.kos}</strong><span>KOs</span></div>
                 </div>
                 <dl class="fighter-table">
@@ -1519,7 +1528,7 @@
           <section id="fighter-profile" class="section">
             <div class="section-head">
               <div>
-                <div class="eyebrow">Fighter profile</div>
+                <div class="eyebrow">Perfil del boxeador</div>
                 <h2 class="section-title">${selectedFighter.name.split(' ')[0]} <span>card</span></h2>
               </div>
               <p class="section-copy">Al hacer click en un boxeador, aterrizas en su ficha destacada con sus datos principales y su contexto competitivo.</p>
@@ -1550,8 +1559,8 @@
         <section id="events" class="section">
           <div class="section-head">
             <div>
-              <div class="eyebrow">Fight calendar</div>
-              <h2 class="section-title">Upcoming <span>fight card</span></h2>
+              <div class="eyebrow">Calendario</div>
+              <h2 class="section-title">Próxima <span>cartelera</span></h2>
             </div>
             <p class="section-copy">Las veladas se presentan como cartelera: sede, fecha y estado con más tensión visual y menos pinta de dashboard genérico.</p>
           </div>
@@ -1566,7 +1575,7 @@
                   <h3 class="event-name">${e.name}</h3>
                   <p class="event-meta">${e.venue}</p>
                   <div class="brand-row">
-                    <span class="brand-pill">Fight Night</span>
+                    <span class="brand-pill">Noche de combate</span>
                     <span class="brand-pill">Boxing Talents</span>
                   </div>
                 </article>
@@ -1580,8 +1589,8 @@
         <section id="bracket" class="section">
           <div class="section-head">
             <div>
-              <div class="eyebrow">Tournament board</div>
-              <h2 class="section-title">Official <span>fight bracket</span></h2>
+              <div class="eyebrow">Cuadro del torneo</div>
+              <h2 class="section-title">Bracket <span>oficial</span></h2>
             </div>
             <p class="section-copy">Refinado para parecer un cuadro oficial de campeonato: columnas de rondas, narrativa de combates y cierre visual de cinturón.</p>
           </div>
@@ -1837,11 +1846,24 @@
       });
 
       document.querySelectorAll('[data-action="delete-fighter"]').forEach(btn => btn.onclick = () => {
+        const fighterId = btn.dataset.id;
+        const fighter = fighterById(fighterId);
+        const msg = document.getElementById('fighter-msg');
+        if (fighterIsUsedInBrackets(fighterId)) {
+          if (msg) {
+            msg.className = 'err';
+            msg.textContent = `No puedes eliminar a ${fighter?.name || 'este boxeador'} porque ya participa en un bracket.`;
+          }
+          return;
+        }
+        if (!confirm(`¿Seguro que quieres eliminar a ${fighter?.name || 'este boxeador'}?`)) return;
         setState(s => {
-          const fighters = s.fighters.filter(f => f.id !== btn.dataset.id);
+          const fighters = s.fighters.filter(f => f.id !== fighterId);
+          const fallbackSelectedId = s.ui.selectedFighterId === fighterId ? (fighters[0]?.id || null) : s.ui.selectedFighterId;
           return {
             ...s,
             fighters,
+            ui: { ...s.ui, selectedFighterId: fallbackSelectedId },
             brackets: s.brackets.map(b => enrichBracket(b, fighters))
           };
         });
@@ -1886,12 +1908,13 @@
           const name = String(fd.get('name') || '');
           const roundName = String(fd.get('roundName') || '');
           const participants = fd.getAll('participants').map(String);
+          const uniqueParticipants = [...new Set(participants)];
           const msg = document.getElementById('bracket-msg');
           if (!name || !roundName) { msg.className = 'err'; msg.textContent = 'Nombre y ronda son obligatorios'; return; }
-          const roundErr = validateRoundSize(participants);
+          const roundErr = validateRoundSize(uniqueParticipants);
           if (roundErr) { msg.className = 'err'; msg.textContent = roundErr; return; }
 
-          const rounds = buildBracketRounds(participants, roundName);
+          const rounds = buildBracketRounds(uniqueParticipants, roundName);
           propagateBracketForward(rounds, 0);
           setState(s => ({
             ...s,
@@ -1901,8 +1924,8 @@
               season: new Date().getFullYear().toString(),
               venue: 'Venue por definir',
               rounds,
-              participantCount: participants.length,
-              bracketSize: nextPowerOfTwo(participants.length),
+              participantCount: uniqueParticipants.length,
+              bracketSize: nextPowerOfTwo(uniqueParticipants.length),
               isActive: true
             }]
           }));
