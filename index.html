@@ -777,6 +777,26 @@
       color: #1f1a13;
     }
 
+    .slot-name-link {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      padding: 0;
+      margin: 0;
+      font: inherit;
+      font-weight: inherit;
+      color: inherit;
+      cursor: pointer;
+      text-align: left;
+      transition: color .18s ease, opacity .18s ease;
+    }
+
+    .slot-name-link:hover,
+    .slot-name-link:focus-visible {
+      color: #8f722e;
+      outline: none;
+    }
+
     .slot-meta {
       font-size: 11px;
       letter-spacing: 0;
@@ -1312,10 +1332,13 @@
     function renderFighterSlot(match, fighterId, slotLabel, isWinner) {
       const fighter = fighterById(fighterId);
       const isBye = !fighterId && slotLabel;
+      const slotName = fighter
+        ? `<button class="slot-name slot-name-link" type="button" data-action="show-fighter-profile" data-id="${fighter.id}">${fighter.name}</button>`
+        : `<div class="slot-name">${isBye ? 'Bye' : 'Pendiente'}</div>`;
       return `
         <div class="fighter-slot ${isWinner ? 'winner' : 'pending'}">
           <div>
-            <div class="slot-name">${fighter?.name || (isBye ? 'Bye' : 'Pendiente')}</div>
+            ${slotName}
             <div class="slot-meta">${fighter ? `(${fighter.city} · ${fighter.gym})` : (isBye ? 'Pase automático' : 'Por definir')}</div>
           </div>
           <span class="${isWinner ? 'winner-chip' : 'slot-seed'}">${slotLabel || ''}</span>
