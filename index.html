@@ -635,13 +635,17 @@
 
     .bracket-graphic {
       overflow-x: auto;
-      padding: 0 0 18px;
+      padding: 0 0 14px;
+      scrollbar-width: thin;
+      scroll-snap-type: x proximity;
     }
 
     .bracket-grid {
+      --col-width: clamp(210px, 22vw, 270px);
+      --connector-gutter: clamp(18px, 2vw, 26px);
       display: grid;
       grid-auto-flow: column;
-      grid-auto-columns: minmax(210px, 1fr);
+      grid-auto-columns: var(--col-width);
       gap: 0;
       min-width: max-content;
       align-items: start;
@@ -651,29 +655,45 @@
     .round-col {
       position: relative;
       display: grid;
-      gap: var(--match-gap, 42px);
-      padding: var(--round-offset, 18px) 10px 0;
-      min-width: 210px;
+      align-content: start;
+      gap: 10px;
+      min-width: var(--col-width);
+      padding: var(--round-offset, 18px) var(--connector-gutter) 0 0;
+      scroll-snap-align: start;
     }
 
-    .round-col::after {
+    .round-header {
+      position: sticky;
+      left: 0;
+      z-index: 1;
+      background: #f5f2eb;
+      padding-right: 6px;
+    }
+
+    .round-body {
+      position: relative;
+      display: grid;
+      gap: var(--match-gap, 42px);
+    }
+
+    .round-body::after {
       content: "";
       position: absolute;
-      top: 76px;
-      right: -1px;
+      top: 26px;
+      right: calc((var(--connector-gutter) * -1) + 8px);
       width: 2px;
-      height: calc(100% - 92px);
-      background: #1d1d1d;
-      opacity: .85;
+      height: calc(100% - 52px);
+      background: linear-gradient(180deg, transparent, #1d1d1d 12%, #1d1d1d 88%, transparent);
+      opacity: .8;
     }
 
-    .round-col:last-child::after,
-    .round-col.champion-col::after { display: none; }
+    .round-col:last-child .round-body::after,
+    .round-col.champion-col .round-body::after { display: none; }
 
     .round-title {
       display: block;
-      width: calc(100% + 20px);
-      margin: 0 -10px 8px;
+      width: 100%;
+      margin: 0 0 8px;
       padding: 8px 10px;
       border-radius: 0;
       text-align: left;
@@ -693,6 +713,25 @@
       padding-left: 2px;
     }
 
+    .match-node {
+      position: relative;
+      padding-right: calc(var(--connector-gutter) - 6px);
+    }
+
+    .match-node::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      right: 0;
+      width: calc(var(--connector-gutter) - 8px);
+      height: 2px;
+      background: #1f1f1f;
+      transform: translateY(-50%);
+    }
+
+    .round-col:last-child .match-node::after,
+    .champion-col .match-node::after { display: none; }
+
     .match-card {
       position: relative;
       padding: 0;
@@ -700,24 +739,11 @@
       background: transparent;
       border: 0;
       box-shadow: none;
-      overflow: visible;
+      overflow: hidden;
     }
 
-    .match-card::before {
-      content: "";
-      position: absolute;
-      right: -16px;
-      top: 50%;
-      width: 16px;
-      height: 2px;
-      background: #1f1f1f;
-      transform: translateY(-50%);
-    }
-
+    .match-card::before,
     .match-card::after { display: none; }
-
-    .round-col:last-child .match-card::before,
-    .champion-col .match-card::before { display: none; }
 
     .match-topline,
     .champion-card,
@@ -730,12 +756,13 @@
     .match-topline {
       grid-template-columns: 1fr auto;
       align-items: center;
+      gap: 8px;
       margin-bottom: 8px;
       padding: 0 2px;
     }
 
     .match-vs {
-      font-size: 16px;
+      font-size: 15px;
       line-height: 1;
       color: #16120b;
       font-family: Inter, system-ui, sans-serif;
@@ -745,11 +772,11 @@
     }
 
     .fighter-slot {
-      grid-template-columns: 1fr auto;
+      grid-template-columns: minmax(0, 1fr) auto;
       align-items: center;
       gap: 10px;
-      padding: 12px 12px;
-      min-height: 44px;
+      padding: 10px 11px;
+      min-height: 42px;
       border-radius: 0;
       border: 2px solid #1c1c1c;
       background: #fffdfa;
@@ -824,17 +851,18 @@
     }
 
     .champion-col {
-      min-width: 230px;
+      min-width: clamp(210px, 20vw, 250px);
       align-self: start;
       padding-top: 18px;
+      padding-right: 0;
     }
 
     .champion-card {
       align-content: center;
       justify-items: center;
-      gap: 14px;
-      min-height: 320px;
-      padding: 20px 14px;
+      gap: 12px;
+      min-height: 280px;
+      padding: 18px 14px;
       border-radius: 0;
       background: #fffdfa;
       border: 2px solid #1d1d1d;
@@ -957,9 +985,14 @@
       .slot-seed,
       .winner-chip { grid-column: 2; justify-self: start; }
       .slot-photo { width: 46px; height: 46px; border-radius: 12px; }
-      .bracket-grid { grid-auto-columns: minmax(190px, 1fr); }
+      .bracket-grid {
+        --col-width: minmax(180px, 1fr);
+        --connector-gutter: 16px;
+        grid-auto-columns: 180px;
+      }
       .round-col,
-      .champion-col { min-width: 190px; }
+      .champion-col { min-width: 180px; }
+      .round-body { gap: clamp(18px, 5vw, 28px) !important; }
       .impact-strip,
       .fighter-profile-grid { grid-template-columns: 1fr; }
       .fighter-profile-panel { grid-template-columns: 1fr; }
@@ -1384,42 +1417,48 @@
           <div class="bracket-graphic">
             <div class="bracket-grid">
               ${bracket.rounds.map((round, roundIndex) => `
-                <section class="round-col" style="--round-offset:${18 + roundIndex * 52}px; --match-gap:${28 + roundIndex * 48}px;">
-                  <div>
+                <section class="round-col" style="--round-offset:${12 + roundIndex * 42}px; --match-gap:${22 + roundIndex * 38}px;">
+                  <div class="round-header">
                     <span class="round-title">${round.name}</span>
                     <p class="round-subtitle">${round.matches.length} cruce${round.matches.length !== 1 ? 's' : ''}</p>
                   </div>
-                  ${round.matches.map((match, matchIndex) => {
-                    const winnerA = match.winnerId && match.winnerId === match.fighter1Id;
-                    const winnerB = match.winnerId && match.winnerId === match.fighter2Id;
-                    return `
-                      <article class="match-card">
-                        <div class="match-topline">
-                          <div class="match-vs">Combate ${matchIndex + 1}</div>
-                          <span class="status-chip">${match.method || 'Pendiente'}</span>
+                  <div class="round-body">
+                    ${round.matches.map((match, matchIndex) => {
+                      const winnerA = match.winnerId && match.winnerId === match.fighter1Id;
+                      const winnerB = match.winnerId && match.winnerId === match.fighter2Id;
+                      return `
+                        <div class="match-node">
+                          <article class="match-card">
+                            <div class="match-topline">
+                              <div class="match-vs">Combate ${matchIndex + 1}</div>
+                              <span class="status-chip">${match.method || 'Pendiente'}</span>
+                            </div>
+                            ${renderFighterSlot(match, match.fighter1Id, match.seed1 || '', winnerA)}
+                            ${renderFighterSlot(match, match.fighter2Id, match.seed2 || '', winnerB)}
+                            <p class="match-note">${match.scheduled ? `Horario · ${match.scheduled}` : (match.method === 'Bye' ? 'Pase automático a la siguiente ronda.' : 'Cuadro pendiente de resolución oficial.')}</p>
+                          </article>
                         </div>
-                        ${renderFighterSlot(match, match.fighter1Id, match.seed1 || '', winnerA)}
-                        ${renderFighterSlot(match, match.fighter2Id, match.seed2 || '', winnerB)}
-                        <p class="match-note">${match.scheduled ? `Horario · ${match.scheduled}` : (match.method === 'Bye' ? 'Pase automático a la siguiente ronda.' : 'Cuadro pendiente de resolución oficial.')}</p>
-                      </article>
-                    `;
-                  }).join('')}
+                      `;
+                    }).join('')}
+                  </div>
                 </section>
               `).join('')}
               <section class="round-col champion-col">
-                <div>
+                <div class="round-header">
                   <span class="round-title">Final</span>
                   <p class="round-subtitle">Resultado oficial</p>
                 </div>
-                <article class="champion-card">
-                  <div class="bracket-medal"></div>
-                  <div class="champion-name">${champion ? champion.name : 'Ganadora pendiente'}</div>
-                  <p class="champion-copy">${champion ? `${champion.city} · ${champion.gym} · ${champion.wins}-${champion.losses}-${champion.draws}` : 'La final mostrará aquí a la campeona una vez se cierre el último cruce.'}</p>
-                  <div class="brand-row">
-                    <span class="belt-mark">Boxing Talents</span>
-                    <span class="brand-pill">Campeón</span>
-                  </div>
-                </article>
+                <div class="round-body">
+                  <article class="champion-card">
+                    <div class="bracket-medal"></div>
+                    <div class="champion-name">${champion ? champion.name : 'Ganadora pendiente'}</div>
+                    <p class="champion-copy">${champion ? `${champion.city} · ${champion.gym} · ${champion.wins}-${champion.losses}-${champion.draws}` : 'La final mostrará aquí a la campeona una vez se cierre el último cruce.'}</p>
+                    <div class="brand-row">
+                      <span class="belt-mark">Boxing Talents</span>
+                      <span class="brand-pill">Campeón</span>
+                    </div>
+                  </article>
+                </div>
               </section>
             </div>
           </div>
